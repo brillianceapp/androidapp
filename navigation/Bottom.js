@@ -3,11 +3,10 @@ import { Image, View, Button, Text, TouchableOpacity, Alert, TextInput, Linking,
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import Earn from "./bottomtab/Earn";
-import Dapps from "./bottomtab/Dapps";
 import Home from "./bottomtab/Home";
-import Airdrop from "./bottomtab/Airdrop";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Setting from "./bottomtab/Setting";
+import History from "./bottomtab/History";
 
 const Tab = createBottomTabNavigator()
 
@@ -28,24 +27,8 @@ class Bottom extends Component {
     this._unsubscribe = this.props.navigation.addListener('focus', () => {
       console.log("refreshed....")
     });
-    this.getToken()
   }
 
-  getToken=async ()=>{
-    try {
-      const token  =await AsyncStorage.getItem("token");
-      if(token){
-        this.setState({token:token})
-      }else{
-        setTimeout(()=>{
-          this.props.navigation.navigate("FirstPage")
-        },200)
-      }
-    } catch (error) {
-      this.setState({token:""})
-      console.log("Token error Bottom Home")
-    }
-  }
 
   handleBackButton = () => {
     //this.props.navigation.goBack(null);
@@ -58,35 +41,41 @@ class Bottom extends Component {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
 
+  handleSubmit=(val)=>{
+    this.props.navigation.navigate("Wallet")
+  }
+
   render() {
     return (
-      <Tab.Navigator initialRouteName="Home"
+      <Tab.Navigator initialRouteName="Wallet"
                      screenOptions={({ route }) => ({
                        tabBarIcon: ({ focused, color, size }) => {
                          let iconName;
                          //console.log(route.name)
-                         if (route.name === 'Dapps') {
-                           iconName = focused
-                             ? <Image style={{width:20,height:20,marginTop:10}} source={require("../images/dappswhite.png")} />
-                             : <Image style={{width:20,height:20,marginTop:10}} source={require("../images/dapps.png")} />;
-                         }else if (route.name === 'Airdrop') {
-                           iconName = focused ? <Image style={{width:20,height:20,marginTop:10}} source={require("../images/airdrop-active-icon.png")} /> :
-                             <Image style={{width:20,height:20,marginTop:10}} source={require("../images/airdrop-icon.png")} />;
-                         } else if (route.name === 'Earn') {
-                           iconName = focused ? <Image style={{width:20,height:20,marginTop:10}} source={require("../images/earnwhite.png")} /> :
-                             <Image style={{width:20,height:20,marginTop:10}} source={require("../images/earn.png")} />;
+                         if (route.name === 'Setting') {
+                           iconName = focused ? <FontAwesome5  name={'cog'} style={{marginTop:5}} color="#ffffff"
+                                                               size={20}  /> :
+                             <FontAwesome5  name={'cog'} color="#000000"
+                                            size={20}  />;
+                         } else if (route.name === 'History') {
+                           iconName = focused ? <FontAwesome5  name={'receipt'} style={{marginTop:5}} color="#ffffff"
+                                                               size={20}  /> :
+                             <FontAwesome5  name={'receipt'} color="#000000"
+                                            size={20}  />;
                          }
-                         else if (route.name === 'Home') {
-                           iconName = focused ? <Image style={{width:20,height:20,marginTop:10}} source={require("../images/home-iconwhite.png")} /> :
-                             <Image style={{width:22,height:22,marginTop:8}} source={require("../images/home-icon.png")} /> ;
+                         else if (route.name === 'Wallet') {
+                           iconName = focused ?<FontAwesome5  name={'wallet'} style={{marginTop:5}} color="#ffffff"
+                                                                                        size={20}  /> :
+                             <FontAwesome5  name={'wallet'} color="#000000"
+                                            size={20}  /> ;
                          }
                          return iconName;
                        },
                        headerTitleAlign:"center",
                        tabBarActiveTintColor: "#ffffff",
-                       tabBarInactiveTintColor: "#023064",
+                       tabBarInactiveTintColor: "#000000",
                        tabBarStyle:{
-                         backgroundColor:"#D0E1F1",
+                         backgroundColor:"#FFFFFF",
                          height:110,
                          borderTopWidth: 0,
                          elevation: 0,
@@ -99,41 +88,55 @@ class Bottom extends Component {
                          paddingBottom:8,
                          fontWeight:"normal"
                        },
-                       tabBarActiveBackgroundColor:"#023064",
+                       tabBarActiveBackgroundColor:"#0078EA",
                        tabBarItemStyle: {
                          borderRadius: 50,
-                         marginVertical:3,
+                         marginVertical:3
                        }
 
                      })}>
-        <Tab.Screen name={"Home"} component={Home}
+        <Tab.Screen name={"History"} component={History} options={{
+          headerShown:true,
+          unmountOnBlur: true,
+          headerTintColor: '#0078EA',
+          headerStyle: {
+            backgroundColor: '#FFFFFF',
+          },
+          headerTitleStyle:{
+            fontSize:20
+          },
+          headerShadowVisible: false,
+          headerLeft: () => (
+            <View  style={{flex:4,flexDirection:"row",paddingTop:15,marginLeft:20}}>
+              <TouchableOpacity onPress={this.handleSubmit.bind(this,1)}
+                                style={{backgroundColor:"white",width:35,height:35,alignItems:"center",
+                                  marginRight:25,borderRadius:50}}>
+                <FontAwesome5 style={{
+                  padding:9
+                }} name={'arrow-left'} color="#0078EA"
+                              size={20}  />
+              </TouchableOpacity>
+            </View>
+          ),
+        }} />
+
+        <Tab.Screen name={"Wallet"} component={Home}
                     options={{headerShown:true,
                       unmountOnBlur: true,
-                      headerTitle: ()=>{
-                        <View style={{display:"flex",flex:1,flexDirection:"column"}}>
-                          <Text>Home</Text>
-                        </View>
-                      },
+                      headerTitle: "Main Wallet",
                       headerStyle: {
-                        backgroundColor: '#D0E1F1',//D0E1F1
-                        height: 100,
+                        backgroundColor: '#ffffff',
                       },
+                      headerTintColor: '#0078EA',
                       headerRight: () => (
                         <View  style={{flex:4,flexDirection:"row",paddingTop:15}}>
-                          <TouchableOpacity onPress={()=>this.props.navigation.navigate("Notification")}
-                                            style={{backgroundColor:"white",width:35,height:35,alignItems:"center",
-                                              marginRight:15,borderRadius:50}}>
-                            <Image style={{width:17,height:17,marginTop:8,
-                            }}
-                                   source={require("../images/notification-icon.png")} />
-                          </TouchableOpacity>
-                          <TouchableOpacity onPress={()=>this.props.navigation.navigate("Setting")}
-                                            style={{backgroundColor:"white",width:35,height:35,alignItems:"center",
-                                              marginRight:25,borderRadius:50}}>
-                            <FontAwesome6 style={{
+                          <TouchableOpacity
+                            style={{backgroundColor:"white",width:35,height:35,alignItems:"center",
+                              marginRight:25,borderRadius:50}}>
+                            <FontAwesome5 style={{
                               padding:9
-                            }} name={'gear'} color="#014281"
-                                          size={17}  />
+                            }} name={'bell'} color="#0078EA"
+                                          size={20}  />
                           </TouchableOpacity>
                         </View>
                       ),
@@ -141,44 +144,36 @@ class Bottom extends Component {
                         <View>
                           <Text  style={{
                             marginLeft:25,height:"100%"}}>
-                            <Image style={{width:90,height:35,marginTop:0}}
-                                   source={require("../images/logoh.png")} />
+                            <Image style={{width:30,height:40,marginTop:0}}
+                                   source={require("../images/scan.png")} />
                           </Text>
                         </View>
                       ),
                     }} />
-        <Tab.Screen name={"Dapps"} component={Dapps} options={{
-          headerShown:false,
-          unmountOnBlur: true,
-          headerStyle: {
-            backgroundColor: '#F3FAFF',
-          }
-        }} />
-        <Tab.Screen name={"Earn"} component={Earn} options={{
-          headerShown:true,
-          unmountOnBlur: true,
-          headerTintColor: '#ffffff',
-          headerStyle: {
-            backgroundColor: '#002B69',
-          },
-          headerTitleStyle:{
-            fontSize:25
-          },
-          headerShadowVisible: false,
-        }} />
 
-        <Tab.Screen name={"Airdrop"} component={Airdrop} options={{
+        <Tab.Screen name={"Setting"} component={Setting} options={{
           headerShown:true,
           unmountOnBlur: true,
-          headerTintColor: '#ffffff',
-          headerTitle: "Airdrop Page",
+          headerTintColor: '#0078EA',
           headerStyle: {
-            backgroundColor: '#013B94',
+            backgroundColor: '#FFFFFF',
           },
           headerTitleStyle:{
-            fontSize:23
+            fontSize:20
           },
           headerShadowVisible: false,
+          headerLeft: () => (
+            <View  style={{flex:4,flexDirection:"row",paddingTop:15,marginLeft:20}}>
+              <TouchableOpacity onPress={this.handleSubmit.bind(this,1)}
+                style={{backgroundColor:"white",width:35,height:35,alignItems:"center",
+                  marginRight:25,borderRadius:50}}>
+                <FontAwesome5 style={{
+                  padding:9
+                }} name={'arrow-left'} color="#0078EA"
+                              size={20}  />
+              </TouchableOpacity>
+            </View>
+          ),
         }} />
 
       </Tab.Navigator>

@@ -9,13 +9,13 @@ import {
   TextInput,
   Linking,
   StatusBar,
-  ScrollView, StyleSheet, ToastAndroid,
+  ScrollView, StyleSheet, ToastAndroid, BackHandler,
 } from "react-native";
 import Video, {VideoRef} from 'react-native-video';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ApiUrl from "../AppUrl/ApiUrl";
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
-const background = require('../images/genaratevidemp4.mp4');
 
 class CreateWallet extends Component {
 
@@ -27,57 +27,7 @@ class CreateWallet extends Component {
   }
 
  async componentDidMount() {
-    try {
-      const token  =await AsyncStorage.getItem("token");
-      if(token){
-        this.setState({token:token})
-        setTimeout(()=>{
-          this.props.navigation.navigate("Bottom")
-        },500)
-      }
-    } catch (error) {
-      this.setState({token:""})
-    }
-    this.submitData()
-  }
-
-  submitData=async ()=>{
-    this.setState({loading:true})
-    var formdata = new FormData()
-    await fetch(ApiUrl.baseurl+"createwallet",{
-      method: 'post',
-      headers: { 'Content-Type':'multipart/form-data'},
-      //body:formdata
-    })
-      .then(response => response.json())
-      .then(res => {
-        this.setState({loading:false})
-        //console.log(res)
-        if(res.success){
-          this.Toast("Wallet Created and "+res.success)
-          this.setToken(res.token)
-          setTimeout(()=>{
-            this.props.navigation.navigate("Bottom")
-          },3000)
-        }
-        if(res.error){
-          this.Toast(res.error)
-        }
-        this.setState({loading:false})
-      })
-      .catch(err => {
-        console.log(err)
-        //this.submitData()
-      })
-  }
-
-  setToken=async (val)=>{
-    try {
-      await AsyncStorage.setItem("token",val);
-      console.log("Token set successfully ")
-    } catch (error) {
-      console.log("Token Set storage error ")
-    }
+   BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
 
   Toast=(val)=>{
@@ -87,29 +37,75 @@ class CreateWallet extends Component {
       ToastAndroid.CENTER
     );
   }
+  handleBackButton = () => {
+    this.props.navigation.goBack()
+    return true;
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
 
   render() {
     return (
-      <View flex={1} style={{backgroundColor:"#D2E1F2",paddingBottom:60}} >
-        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#D2E1F2" translucent = {true}/>
+      <View flex={1} style={{backgroundColor:"#FFFFFF",paddingBottom:60}} >
+        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true}/>
 
         <ScrollView>
-          <View style={{padding:35}}>
-            <Video
-              // Can be a URL or a local file.
-              source={background}
-              repeat={true}
-              style={styles.backgroundVideo}
-            />
-            <Text style={{color:"black",fontSize:19,marginTop:80}}>
-              We are creating your wallet
-            </Text>
-            {this.state.loading==false?
-              <Text style={{color:"black",fontSize:25,marginBottom:0,marginTop:25}}>
-                Your wallet is now <Text style={{color:"#063267"}}>Ready</Text>
-              </Text>:""
-            }
+
+          <>
+
+            <View style={{padding:20,alignItems:"center"}}>
+              <Text style={{color:"black",fontSize:22,marginTop:30,fontWeight:"bold"}}>
+                Secret Your Private Key
+              </Text>
+              <Text style={{color:"red",fontSize:16,marginBottom:60,marginTop:25,textAlign:"center",paddingHorizontal:15}}>
+                If you loss your private key you will loss your fund access
+              </Text>
+
+            </View>
+            <View style={{paddingHorizontal:40}}>
+              <Text style={{color:"black",fontSize:18,marginBottom:20}}>
+                Private Key
+              </Text>
+
+              <TouchableOpacity>
+                <Text style={{borderColor:"#0078EA",borderWidth:2,
+                  borderRadius:15,height:150,backgroundColor:"#E8F1FF",padding:25,
+                  color:"black",fontSize:20}}>
+                  df824974bb0ea84e15e808dbdd208f6f8925ea8e702be3c9720cf049593e8404
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity>
+                <Text style={{color:"#0078EA",fontSize:18,marginTop:60,
+                  textAlign:"center"}}>
+                  Copy to Clipboard <FontAwesome6 style={{
+                    padding:9
+                  }} name={'copy'} color="#0078EA"
+                                size={18}  />
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={()=>this.props.navigation.navigate("Bottom")}
+                style={{backgroundColor:"#0078EA",width:"100%",
+                  height:55,borderRadius:10,marginTop:20}}>
+                <Text style={{color:"white",textAlign:"center",padding:12,fontSize:20}}>Go to Wallet</Text>
+              </TouchableOpacity>
+
+            </View>
+
+          </>
+
+          <View style={{paddingHorizontal:40,display:"none"}}>
+            <TouchableOpacity
+              style={{backgroundColor:"#0078EA",width:"100%",
+                height:55,borderRadius:10,marginTop:350}}>
+              <Text style={{color:"white",textAlign:"center",padding:12,fontSize:20}}>Create Wallet Now</Text>
+            </TouchableOpacity>
           </View>
+
+
         </ScrollView>
 
       </View>

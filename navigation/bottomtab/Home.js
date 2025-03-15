@@ -240,7 +240,7 @@ class Home extends Component {
       await  this.setState({dwallet:dwallet})
       //await this.saveWallet()
       await setTimeout(async ()=>{
-        await AsyncStorage.setItem("dwallet",JSON.stringify(this.state.dwallet))
+        await AsyncStorage.setItem("dwallet",JSON.stringify(this.state.dwallet));
         await console.log("Wallet Saved with new Balance  ",dwallet)
       },100)
 
@@ -250,7 +250,7 @@ class Home extends Component {
 
   saveWallet=async ()=>{
     try{
-     await AsyncStorage.setItem("dwallet",JSON.stringify(this.state.dwallet))
+     await AsyncStorage.setItem("dwallet",JSON.stringify(this.state.dwallet));
       console.log("Wallet Saved Localstorage ")
     }catch (err){}
   }
@@ -368,8 +368,9 @@ class Home extends Component {
 
     return (
       <ScrollView refreshControl={
-        <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />} flex={1} style={{backgroundColor:"#D0E1F1"}} >
-        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#D0E1F1" translucent = {true}/>
+        <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />} flex={1}
+                  style={{backgroundColor:"#FFFFFF"}} >
+        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true}/>
 
         <View style={{backgroundColor:"#226BAF",padding:15,
           marginHorizontal:20,borderRadius:15,marginTop:15}}>

@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import ApiUrl from "../AppUrl/ApiUrl";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
 class ImportWallet extends Component {
   constructor() {
@@ -90,34 +91,37 @@ class ImportWallet extends Component {
 
   render() {
     return (
-      <View flex={10} style={{backgroundColor:"#D0E1F1",paddingBottom:60}} >
-        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#D0E1F1" translucent = {true}/>
+      <View flex={10} style={{backgroundColor:"#FFFFFF",paddingBottom:60}} >
+        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true}/>
 
-        <View flex={5} style={{paddingHorizontal:30,paddingTop:70}}>
-          <Text style={{color:"#000000",fontSize:20,borderBottomWidth:2,
-            borderColor:"#3188D7",marginBottom:30,paddingBottom:10,
-            width:150,fontWeight:"bold"
-          }}>RECOVERY KEY</Text>
-          <TextInput value={this.state.key} onChangeText={this.key}
-                     style={{height:180,width:"100%",backgroundColor:"white",
-            color:"black",marginTop:5,borderRadius:10,fontSize:16,
-            paddingLeft:10,borderWidth:2,borderColor:"#3188D7"}}
-                      placeholderTextColor="#000"
-                      placeholder="Paste your wallet key"/>
-        </View>
-        <View flex={4} style={{flexDirection:"flex-end",alignItems:"flex-end"}}>
-          <TouchableOpacity style={{backgroundColor:"#022F64",width:80,padding:5,
-            borderRadius:25,marginRight:50,marginTop:-30,display:"none"}}>
-            <Text style={{color:"#ffffff",textAlign:"center"}}>Paste</Text>
-          </TouchableOpacity>
+        <View flex={9} style={{paddingHorizontal:0}}>
+          <View style={{padding:20,alignItems:"center"}}>
+
+          </View>
+          <View style={{paddingHorizontal:40,marginTop:50}}>
+            <Text style={{color:"black",fontSize:18,marginBottom:20}}>
+              Private Key
+            </Text>
+
+            <TextInput style={{borderColor:"#0078EA",borderWidth:2,
+              borderRadius:15,height:150,backgroundColor:"#E8F1FF",padding:20,
+              color:"black",fontSize:16}} placeholder={"Paste your private key"}>
+
+            </TextInput>
+
+
+
+          </View>
+
         </View>
 
         <View flex={1} style={{alignItems:"center",padding:30}}>
 
           <TouchableOpacity disabled={this.state.loading}
-                            onPress={this.onSubmit} style={{backgroundColor:"#3188D7",width:"100%",height:60,borderRadius:10}}>
-            <Text style={{color:"white",textAlign:"center",padding:15,fontSize:20}}>
-              {this.state.loading==false?"Import":
+                            onPress={this.onSubmit} style={{backgroundColor:"#0078EA",width:"100%",
+            height:55,borderRadius:10}}>
+            <Text style={{color:"white",textAlign:"center",padding:12,fontSize:18}}>
+              {this.state.loading==false?"Import Now":
                 <ActivityIndicator size="large" color="#ffffff" />
               }
             </Text>
