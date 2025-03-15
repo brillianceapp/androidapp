@@ -451,7 +451,7 @@ class Home extends Component {
             <Text style={{color:"#226BAF",fontSize:16}}>History</Text>
           </View>
         </View>
-        
+
 
 
         <View flex={2} style={{flexDirection:"row",paddingHorizontal:30,marginTop:10,marginBottom:20}}>

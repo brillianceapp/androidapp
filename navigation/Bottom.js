@@ -133,19 +133,20 @@ class Bottom extends Component {
                           <TouchableOpacity
                             style={{backgroundColor:"white",width:35,height:35,alignItems:"center",
                               marginRight:25,borderRadius:50}}>
-                            <FontAwesome5 style={{
-                              padding:9
-                            }} name={'bell'} color="#0078EA"
-                                          size={20}  />
+                            <Text  style={{
+                              height:"100%",marginTop:0}}>
+                              <Image style={{width:25,height:25,}}
+                                     source={require("../images/notification.png")} />
+                            </Text>
                           </TouchableOpacity>
                         </View>
                       ),
                       headerLeft: () => (
                         <View>
                           <Text  style={{
-                            marginLeft:25,height:"100%"}}>
-                            <Image style={{width:30,height:40,marginTop:0}}
-                                   source={require("../images/scan.png")} />
+                            marginLeft:25,height:"100%",marginTop:10}}>
+                            <Image style={{width:25,height:25,}}
+                                   source={require("../images/bluescaner.png")} />
                           </Text>
                         </View>
                       ),
