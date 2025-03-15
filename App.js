@@ -97,7 +97,7 @@ const App = ({navigation}) => {
                           headerStyle: {
                             backgroundColor: '#D0E1F1'
                           },
-                          headerTitle: "Send "+route.params.name,
+                          headerTitle: "Send ",
                           headerTintColor: '#000000',
                           headerTitleStyle:{
                             fontSize:25
@@ -108,19 +108,18 @@ const App = ({navigation}) => {
 
 
 
-
         <Stack.Screen name="ReceiveCoin" component={ReceiveCoin}
                       options={({route,navigation})=>(
                         {
                           headerShown:true,
                           headerBackVisible:true,
                           headerStyle: {
-                            backgroundColor: '#D0E1F1'
+                            backgroundColor: '#FFFFFF',
                           },
-                          headerTitle: "Receive "+route.params.name,
-                          headerTintColor: '#000000',
+                          headerTitle: "Receive Brilliance ",
+                          headerTintColor: '#0078EA',
                           headerTitleStyle:{
-                            fontSize:25
+                            fontSize:20
                           },
                           headerShadowVisible: false,
                         }

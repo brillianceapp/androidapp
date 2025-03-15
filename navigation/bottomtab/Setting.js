@@ -47,7 +47,7 @@ class Setting extends Component {
       <View flex={1} style={{flexDirection:"column",justifyContent:"center",backgroundColor:"#FFFFFF"}} >
         <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true}/>
 
-        <ScrollView style={{paddingHorizontal:20,marginBottom:100}}>
+        <ScrollView style={{paddingHorizontal:0,marginBottom:100}}>
           <View style={{paddingHorizontal:20,marginTop:50}}>
 
             <View style={{backgroundColor:"#E5EAFF",height:50,marginBottom:20,

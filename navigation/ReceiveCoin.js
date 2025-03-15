@@ -23,13 +23,11 @@ class ReceiveCoin extends Component {
     super();
     this.state={
       name:"",
-      address:"0xtisimnacfyiwmqia"
+      address:"0x01993ba5A122ebE4cEa42f345A1cCa6232642156"
     }
   }
 
   componentDidMount() {
-    console.log(this.props.route.params.name)
-    this.setState({name:this.props.route.params.name})
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
   handleBackButton = () => {
@@ -58,8 +56,8 @@ class ReceiveCoin extends Component {
 
   render() {
     return (
-      <View flex={10} style={{backgroundColor:"#D0E1F1",paddingBottom:60}} >
-        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#D0E1F1" translucent = {true}/>
+      <View flex={10} style={{backgroundColor:"#FFFFFF",paddingBottom:60}} >
+        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true}/>
 
 
         <ScrollView>
@@ -69,21 +67,18 @@ class ReceiveCoin extends Component {
             </Text>
             <Text style={{color:"#000000",fontSize:16,textAlign:"center"}}>or You Might lose your funds</Text>
 
-            <View style={{padding:20,borderColor:"#338DE0",alignItems:"center",
+            <View style={{padding:0,borderColor:"#FFFFFF",alignItems:"center",
               borderWidth:2,borderRadius:25,height:200,width:200,marginTop:60}}>
               <QRCode
                 value={this.state.address}
-                size={150}
+                size={200}
                 bgColor='#FFFFFF'
                 fgColor='#000000'/>
             </View>
 
-            <View style={{flexDirection:"row",marginTop:40}}>
-              <Image style={{height:40,width:40,borderRadius:50,marginTop:2}}
-                     source={{uri:"https://img.bitgetimg.com/multiLang/coin_img/2edf1ef8b333c40979976d1a49bc234c.png"}}/>
-              <Text style={{color:"#000000",fontSize:25,marginLeft:10,fontWeight:"bold"}}>Bitcoin (BTC)</Text>
-            </View>
-            <Text style={{fontSize:18,color:"#000000"}}>{this.state.address}</Text>
+
+            <Text style={{fontSize:18,color:"#000000",marginTop:30,paddingHorizontal:20}}>
+              {this.state.address} </Text>
 
             <View flex={2} style={{flexDirection:"row",marginTop:40,paddingHorizontal:20}}>
               <View flex={1} style={{alignItems:"center"}}>

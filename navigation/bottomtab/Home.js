@@ -417,7 +417,7 @@ class Home extends Component {
 
         <View flex={4} style={{flexDirection:"row",paddingVertical:20,marginHorizontal:30}}>
           <View flex={1} style={{alignItems:"center"}}>
-            <TouchableOpacity onPress={()=>this.props.navigation.navigate("SendList")} style={{backgroundColor:"#226BAF",padding:15,borderRadius:15}}>
+            <TouchableOpacity onPress={()=>this.props.navigation.navigate("SendCoin")} style={{backgroundColor:"#226BAF",padding:15,borderRadius:15}}>
               <Image style={{width:30,height:30,marginTop:0,
               }}
                      source={require("../../images/Send-icon.png")} />
@@ -426,7 +426,7 @@ class Home extends Component {
           </View>
           <View flex={1} style={{alignItems:"center"}}>
             <TouchableOpacity
-              onPress={()=>this.props.navigation.navigate("ReceiveList")}
+              onPress={()=>this.props.navigation.navigate("ReceiveCoin")}
               style={{backgroundColor:"#226BAF",padding:15,borderRadius:15}}>
               <Image style={{width:30,height:30,marginTop:0,
               }}
@@ -443,7 +443,7 @@ class Home extends Component {
             <Text style={{color:"#226BAF",fontSize:16}}>Earn</Text>
           </View>
           <View flex={1} style={{alignItems:"center"}}>
-            <TouchableOpacity onPress={()=>this.props.navigation.navigate("AllHistory")} style={{backgroundColor:"#226BAF",padding:15,borderRadius:15}}>
+            <TouchableOpacity onPress={()=>this.props.navigation.navigate("History")} style={{backgroundColor:"#226BAF",padding:15,borderRadius:15}}>
               <FontAwesome6
                 name={'clock-rotate-left'} style={{marginTop:0}} color="#ffffff"
                 size={30}  />
@@ -451,32 +451,8 @@ class Home extends Component {
             <Text style={{color:"#226BAF",fontSize:16}}>History</Text>
           </View>
         </View>
+        
 
-        <View flex={1} style={{marginTop:10,paddingHorizontal:20,
-          width:"100%",height:100,alignItems:"center"}}>
-          <View style={{width:"100%",height:"100%"}}>
-            <Carousel
-              data={data}
-              renderItem={this._renderItem}
-              sliderWidth={Dimensions.get('window').width}
-              itemWidth={Dimensions.get('window').width}
-              autoplay={true}
-              firstItem={0}
-              loop={true}
-              autoplayDelay={3000}
-            />
-          </View>
-        </View>
-
-        <View flex={1} style={{alignItems:"flex-end",paddingHorizontal:30,marginTop:18,marginBottom:10}}>
-          <View style={{width:"100%",height:30,borderColor:"white",paddingVertical:5,paddingHorizontal:10,
-            borderWidth:1,borderRadius:25,flexDirection:"row",backgroundColor:"white"}}>
-            <FontAwesome5 name="search" color="#023064" style={{marginRight:5}} size={16}/>
-            <TextInput  value={""} style={{height:28,width:"85%",backgroundColor:"transparent",
-              color:"black",marginTop:-5,borderRadius:10,fontSize:16,padding:0,
-              paddingBottom:5,paddingLeft:10}} placeholder="search"/>
-          </View>
-        </View >
 
         <View flex={2} style={{flexDirection:"row",paddingHorizontal:30,marginTop:10,marginBottom:20}}>
           <View flex={1} style={{backgroundColor:"white",alignItems:"center",padding:10,borderRadius:25}}>

@@ -23,8 +23,6 @@ class SendCoin extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.route.params.name)
-    this.setState({name:this.props.route.params.name})
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
   }
 
