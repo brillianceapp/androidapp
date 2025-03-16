@@ -124,11 +124,15 @@ class Bottom extends Component {
         <Tab.Screen name={"Wallet"} component={Home}
                     options={{headerShown:true,
                       unmountOnBlur: true,
-                      headerTitle: "Main Wallet",
+                      headerTitle: "MAIN WALLET",
                       headerStyle: {
                         backgroundColor: '#ffffff',
                       },
+                      headerTitleStyle:{
+                        fontSize:18
+                      },
                       headerTintColor: '#0078EA',
+                      headerShadowVisible: false,
                       headerRight: () => (
                         <View  style={{flex:4,flexDirection:"row",paddingTop:15}}>
                           <TouchableOpacity
