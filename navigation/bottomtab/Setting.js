@@ -47,7 +47,7 @@ class Setting extends Component {
               </TouchableOpacity>
             </View>
 
-            <Text style={{fontSize:20,color:"#000000",marginTop:20,marginBottom:20}}>Follow us on</Text>
+            <Text style={{fontSize:18,color:"#000000",marginTop:20,marginBottom:20}}>Follow us on</Text>
 
             <View style={{backgroundColor:"#tranparent",height:50,marginBottom:20,
               borderRadius:25,paddingHorizontal:15,flexDirection:"row"}}>
@@ -72,8 +72,8 @@ class Setting extends Component {
 
             <View style={{height:150,padding:20,paddingHorizontal:0,marginBottom:100,marginTop:60}}>
               <TouchableOpacity onPress={this.logOut} style={{height:50,borderRadius:25,marginTop:0,
-                borderColor:"red",borderWidth:2,alignItems:"center",padding:8}}>
-                <Text style={{fontSize:20,color:"red",fontWeight:"bold"}}>Log Out</Text>
+                borderColor:"red",borderWidth:1,alignItems:"center",padding:8}}>
+                <Text style={{fontSize:20,color:"red"}}>Log Out</Text>
               </TouchableOpacity>
             </View>
 
