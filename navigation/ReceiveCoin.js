@@ -61,14 +61,23 @@ class ReceiveCoin extends Component {
 
 
         <ScrollView>
+          <View style={{paddingHorizontal:30,marginTop:50}}>
+            <TouchableOpacity>
+              <View style={{color:"#000000",flexDirection:"row",
+                borderBottomWidth:1,borderColor:"#0078EA",paddingBottom:5}}>
+                <Text style={{fontSize:17,textAlign:"left",width:"50%",color:"black"}}>
+                  Brilliance
+                </Text>
+                <View style={{alignItems:"flex-end",width:"50%"}}>
+                  <Image style={{width:30,height:30}}
+                         source={require("../images/downarrow.png")} />
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
           <View style={{paddingHorizontal:20,alignItems:"center",marginTop:20,marginBottom:70}}>
-            <Text style={{color:"#000000",fontSize:14,textAlign:"center"}}>
-              Send Only BTC Token in BSC Network To This Address,
-            </Text>
-            <Text style={{color:"#000000",fontSize:16,textAlign:"center"}}>or You Might lose your funds</Text>
-
             <View style={{padding:0,borderColor:"#FFFFFF",alignItems:"center",
-              borderWidth:2,borderRadius:25,height:200,width:200,marginTop:60}}>
+              borderWidth:2,borderRadius:25,height:200,width:200,marginTop:40}}>
               <QRCode
                 value={this.state.address}
                 size={200}
@@ -77,31 +86,30 @@ class ReceiveCoin extends Component {
             </View>
 
 
-            <Text style={{fontSize:18,color:"#000000",marginTop:30,paddingHorizontal:20}}>
-              {this.state.address} </Text>
-
-            <View flex={2} style={{flexDirection:"row",marginTop:40,paddingHorizontal:20}}>
-              <View flex={1} style={{alignItems:"center"}}>
-                <TouchableOpacity onPress={this.copyToClipboard}
-                                  style={{flexDirection:"row",borderWidth:2,
-                  borderColor:"#012F63",alignItems:"center",borderRadius:25,paddingVertical:10,paddingHorizontal:30}}>
-                  <Text style={{color:"#012F63",fontSize:18,marginRight:10}}>Copy </Text>
-                  <FontAwesome6
-                    name={'copy'} style={{marginTop:0}} color="#012F63"
-                    size={18}  />
-                </TouchableOpacity>
-              </View>
-              <View flex={1} style={{alignItems:"center"}}>
-                <TouchableOpacity onPress={this.copyToClipboard}
-                  style={{flexDirection:"row",borderWidth:2,
-                  borderColor:"#012F63",alignItems:"center",borderRadius:25,paddingVertical:10,paddingHorizontal:30}}>
-                  <Text style={{color:"#012F63",fontSize:18,marginRight:10}}>Share </Text>
-                  <FontAwesome6
-                    name={'share-nodes'} style={{marginTop:0}} color="#012F63"
-                    size={18}  />
-                </TouchableOpacity>
-              </View>
+            <View style={{paddingHorizontal:10,marginTop:80}}>
+              <TouchableOpacity>
+                <View style={{color:"#000000",flexDirection:"row",paddingHorizontal:10,
+                  borderBottomWidth:1,borderColor:"#000000",paddingBottom:5}}>
+                  <Text style={{fontSize:17,textAlign:"left",width:"80%",color:"black"}}>
+                    {this.state.address}
+                  </Text>
+                  <View style={{alignItems:"flex-end",width:"20%"}}>
+                    <TouchableOpacity onPress={this.copyToClipboard}>
+                      <FontAwesome6
+                        name={'copy'} style={{marginTop:10}} color="#012F63"
+                        size={18}  />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </TouchableOpacity>
             </View>
+
+
+            <TouchableOpacity onPress={()=>this.props.navigation.navigate("Bottom")}
+                              style={{backgroundColor:"#0078EA",width:"100%",
+                                height:55,borderRadius:10,marginTop:70}}>
+              <Text style={{color:"white",textAlign:"center",padding:12,fontSize:18}}>Continue</Text>
+            </TouchableOpacity>
 
           </View>
         </ScrollView>

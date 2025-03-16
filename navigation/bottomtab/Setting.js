@@ -15,7 +15,7 @@ import Carousel from "react-native-snap-carousel";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
 class Setting extends Component {
-  
+
 
   render() {
 

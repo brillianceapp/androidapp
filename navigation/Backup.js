@@ -55,43 +55,43 @@ class Backup extends Component {
 
   render() {
     return (
-      <View flex={10} style={{backgroundColor:"#D0E1F1",paddingBottom:60}} >
-        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#D0E1F1" translucent = {true}/>
+      <View flex={10} style={{backgroundColor:"#FFFFFF",paddingBottom:60}} >
+        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true}/>
 
 
         <ScrollView>
-          <View style={{paddingHorizontal:20,alignItems:"center",marginTop:20,marginBottom:70}}>
-            <Text style={{color:"#000000",fontSize:16,textAlign:"center"}}>
-              Backup your Wallet Key , Don't share your wallet Key,
+          <View style={{padding:20,alignItems:"center"}}>
+            <Text style={{color:"black",fontSize:22,marginTop:30,fontWeight:"bold"}}>
+              Secret Your Private Key
             </Text>
-            <Text style={{color:"red",fontSize:16,textAlign:"center"}}>if You share you will lose your funds</Text>
+            <Text style={{color:"red",fontSize:16,marginBottom:60,marginTop:25,textAlign:"center",paddingHorizontal:15}}>
+              If you loss your private key you will loss your fund access
+            </Text>
 
-            <View style={{padding:20,borderColor:"#338DE0",alignItems:"center",
-              borderWidth:2,borderRadius:25,height:200,width:200,marginTop:50}}>
-              <QRCode
-                value={this.state.address}
-                size={150}
-                bgColor='#FFFFFF'
-                fgColor='#000000'/>
-            </View>
+          </View>
+          <View style={{paddingHorizontal:40}}>
+            <Text style={{color:"black",fontSize:18,marginBottom:20}}>
+              Private Key
+            </Text>
 
+            <TouchableOpacity>
+              <Text style={{borderColor:"#0078EA",borderWidth:2,
+                borderRadius:15,height:150,backgroundColor:"#E8F1FF",padding:25,
+                color:"black",fontSize:20}}>
+                df824974bb0ea84e15e808dbdd208f6f8925ea8e702be3c9720cf049593e8404
+              </Text>
+            </TouchableOpacity>
 
-            <Text style={{fontSize:18,color:"#000000",marginTop:20}}>{this.state.address}</Text>
+            <TouchableOpacity>
+              <Text style={{color:"#0078EA",fontSize:18,marginTop:60,
+                textAlign:"center"}}>
+                Copy to Clipboard <FontAwesome6 style={{
+                padding:9
+              }} name={'copy'} color="#0078EA"
+                                                size={18}  />
+              </Text>
+            </TouchableOpacity>
 
-            <View flex={2} style={{flexDirection:"row",marginTop:40,paddingHorizontal:20}}>
-              <View flex={2} style={{alignItems:"center"}}>
-                <TouchableOpacity onPress={this.copyToClipboard}
-                                  style={{flexDirection:"row",borderWidth:2,width:"100%",
-                                    borderColor:"#012F63",alignItems:"center",
-                                    borderRadius:25,paddingVertical:10,
-                                    paddingHorizontal:30,justifyContent:"center"}}>
-                  <Text style={{color:"#012F63",fontSize:18,marginRight:10,textAlign:"center"}}>Copy </Text>
-                  <FontAwesome6
-                    name={'copy'} style={{marginTop:0}} color="#012F63"
-                    size={18}  />
-                </TouchableOpacity>
-              </View>
-            </View>
 
           </View>
         </ScrollView>

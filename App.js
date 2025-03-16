@@ -60,8 +60,8 @@ const App = ({navigation}) => {
         <Stack.Screen name="About" component={About} options={{
           headerShown:true,
           headerBackVisible:true,
-          headerStyle: { backgroundColor: '#D0E1F1'},
-          headerTintColor: '#000000',
+          headerStyle: { backgroundColor: '#FFFFFF'},
+          headerTintColor: '#0078EA',
           headerTitleStyle:{
             fontSize:22
           },
@@ -95,12 +95,12 @@ const App = ({navigation}) => {
                           headerShown:true,
                           headerBackVisible:true,
                           headerStyle: {
-                            backgroundColor: '#D0E1F1'
+                            backgroundColor: '#FFFFFF'
                           },
                           headerTitle: "Send ",
-                          headerTintColor: '#000000',
+                          headerTintColor: '#0078EA',
                           headerTitleStyle:{
-                            fontSize:25
+                            fontSize:20
                           },
                           headerShadowVisible: false,
                         }
@@ -132,12 +132,12 @@ const App = ({navigation}) => {
                           headerShown:true,
                           headerBackVisible:true,
                           headerStyle: {
-                            backgroundColor: '#D0E1F1'
+                            backgroundColor: '#FFFFFF'
                           },
-                          headerTitle: "Back Up ",
-                          headerTintColor: '#000000',
+                          headerTitle: "Back Up Key",
+                          headerTintColor: '#0078EA',
                           headerTitleStyle:{
-                            fontSize:25
+                            fontSize:20
                           },
                           headerShadowVisible: false,
                         }

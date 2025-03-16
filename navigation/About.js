@@ -27,30 +27,31 @@ class About extends Component {
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
-  hideSpinner() {
-    this.setState({ visible: false });
-  }
+
   render() {
     return (
-      <View flex={1} style={{backgroundColor:"#D0E1F1",paddingBottom:60,paddingHorizontal:20,paddingTop:20}} >
-        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#D0E1F1" translucent = {true}/>
+      <View flex={1} style={{backgroundColor:"#FFFFFF",paddingBottom:60,paddingHorizontal:20,paddingTop:20}} >
+        <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true}/>
 
-        <View style={{backgroundColor:"#D0E1F1"}} flex={1} style={{marginTop:-90}}>
+        <View style={{backgroundColor:"#FFFFFF"}} flex={1} >
 
-          <WebView onLoad={() =>
-            this.hideSpinner()}
-                   source={{ uri: "https://app.zeroswallet.com/about" }}
-                   scalesPageToFit={false}
-                   scrollEnabled={false}
-                   setBuiltInZoomControls={false}
-                   javaScriptEnabled={true}
-                   style={{
-                     backgroundColor: '#D0E1F1'
-                   }}
-          />
 
-          {this.state.visible==true?<ActivityIndicator size="large" color="red"
-                                                       style={{marginTop:-500}}/>:""}
+          <Text style={{color:"black",marginBottom:20,fontSize:18}}>
+            This is Brilliance Coin Decentralized Wallet,
+            Your key your access,
+            Secure, Efficient, Reliable
+            Decentralized Web3
+            Wallet,
+
+          </Text>
+
+          <Text style={{color:"black",fontSize:16}}>
+
+            This Wallet represents a new era of crypto management.
+            Built for Ethereum, Binance Smart Chain, Avalanche, and more, Brilliance
+            Wallet empowers you to securely store, send, receive,
+            and earn assets across multiple blockchain networks—all in one place.
+          </Text>
 
         </View>
 

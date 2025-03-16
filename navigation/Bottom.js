@@ -86,13 +86,14 @@ class Bottom extends Component {
                        tabBarLabelStyle: {
                          fontSize: 14,
                          paddingBottom:8,
-                         fontWeight:"normal"
+                         fontWeight:"normal",
+                        // display:"none"
                        },
                        tabBarActiveBackgroundColor:"#0078EA",
                        tabBarItemStyle: {
                          borderRadius: 50,
                          marginVertical:3
-                       }
+                       },
 
                      })}>
         <Tab.Screen name={"History"} component={History} options={{
@@ -143,11 +144,13 @@ class Bottom extends Component {
                       ),
                       headerLeft: () => (
                         <View>
-                          <Text  style={{
-                            marginLeft:25,height:"100%",marginTop:10}}>
-                            <Image style={{width:25,height:25,}}
-                                   source={require("../images/bluescaner.png")} />
-                          </Text>
+                          <TouchableOpacity onPress={()=>this.props.navigation.navigate("SendCoin")}>
+                            <Text  style={{
+                              marginLeft:25,height:"100%",marginTop:10}}>
+                              <Image style={{width:25,height:25,}}
+                                     source={require("../images/bluescaner.png")} />
+                            </Text>
+                          </TouchableOpacity>
                         </View>
                       ),
                     }} />
