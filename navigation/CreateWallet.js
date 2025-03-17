@@ -9,25 +9,29 @@ import {
   TextInput,
   Linking,
   StatusBar,
-  ScrollView, StyleSheet, ToastAndroid, BackHandler,
+  ScrollView, StyleSheet, ToastAndroid, BackHandler, Clipboard,
 } from "react-native";
 import Video, {VideoRef} from 'react-native-video';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ApiUrl from "../AppUrl/ApiUrl";
-import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
+// Import the crypto getRandomValues shim (**BEFORE** the shims)
 
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
+import {ethers} from "ethers";
+import 'react-native-get-random-values';
 
 class CreateWallet extends Component {
 
   constructor() {
     super();
     this.state={
-      loading:false
+      loading:false,key:""
     }
   }
 
  async componentDidMount() {
    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+
   }
 
   Toast=(val)=>{
@@ -42,6 +46,41 @@ class CreateWallet extends Component {
     return true;
   }
 
+  createWallet=()=>{
+    this.setState({loading:true})
+    var d = ethers.Wallet.createRandom().privateKey
+    var key = d.substring(2)
+    this.setState({key:key})
+    console.log(key)
+    this.setState({key:key})
+    if(d){
+      this.setState({key:key,loading:false})
+      this.setToken(key)
+    }
+
+  }
+
+  setToken=async (val)=>{
+    try {
+      await AsyncStorage.setItem("token",val);
+      console.log("Token set successfully ")
+      setTimeout(()=>{
+        this.props.navigation.navigate("Bottom")
+      },5000)
+    } catch (error) {
+      console.log("Token Set storage error ")
+    }
+  }
+
+  copyToClipboard = () => {
+    Clipboard.setString(this.state.key);
+    ToastAndroid.show(this.state.key,
+      ToastAndroid.SHORT,
+      ToastAndroid.TOP,
+      ToastAndroid.CENTER
+    );
+  };
+
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
@@ -53,57 +92,62 @@ class CreateWallet extends Component {
 
         <ScrollView>
 
-          <>
+          {this.state.key?
+            <>
 
-            <View style={{padding:20,alignItems:"center"}}>
-              <Text style={{color:"black",fontSize:22,marginTop:30,fontWeight:"bold"}}>
-                Secret Your Private Key
-              </Text>
-              <Text style={{color:"red",fontSize:16,marginBottom:60,marginTop:25,textAlign:"center",paddingHorizontal:15}}>
-                If you loss your private key you will loss your fund access
-              </Text>
-
-            </View>
-            <View style={{paddingHorizontal:40}}>
-              <Text style={{color:"black",fontSize:18,marginBottom:20}}>
-                Private Key
-              </Text>
-
-              <TouchableOpacity>
-                <Text style={{borderColor:"#0078EA",borderWidth:2,
-                  borderRadius:15,height:150,backgroundColor:"#E8F1FF",padding:25,
-                  color:"black",fontSize:20}}>
-                  df824974bb0ea84e15e808dbdd208f6f8925ea8e702be3c9720cf049593e8404
+              <View style={{padding:20,alignItems:"center"}}>
+                <Text style={{color:"black",fontSize:22,marginTop:30,fontWeight:"bold"}}>
+                  Secret Your Private Key
                 </Text>
-              </TouchableOpacity>
+                <Text style={{color:"red",fontSize:16,marginBottom:60,marginTop:25,textAlign:"center",paddingHorizontal:15}}>
+                  If you loss your private key you will loss your fund access
+                </Text>
 
-              <TouchableOpacity>
-                <Text style={{color:"#0078EA",fontSize:18,marginTop:60,
-                  textAlign:"center"}}>
-                  Copy to Clipboard <FontAwesome6 style={{
+              </View>
+              <View style={{paddingHorizontal:40}}>
+                <Text style={{color:"black",fontSize:18,marginBottom:20}}>
+                  Private Key
+                </Text>
+
+                <TouchableOpacity>
+                  <Text style={{borderColor:"#0078EA",borderWidth:2,
+                    borderRadius:15,height:150,backgroundColor:"#E8F1FF",padding:25,
+                    color:"black",fontSize:20}}>
+                    {this.state.key}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={this.copyToClipboard}>
+                  <Text style={{color:"#0078EA",fontSize:18,marginTop:60,
+                    textAlign:"center"}}>
+                    Copy to Clipboard <FontAwesome6 style={{
                     padding:9
                   }} name={'copy'} color="#0078EA"
-                                size={18}  />
+                                                    size={18}  />
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={()=>this.props.navigation.navigate("Bottom")}
+                                  style={{backgroundColor:"#0078EA",width:"100%",
+                                    height:55,borderRadius:10,marginTop:20}}>
+                  <Text style={{color:"white",textAlign:"center",padding:12,fontSize:20}}>Go to Wallet</Text>
+                </TouchableOpacity>
+
+              </View>
+
+            </>
+
+            :
+            <View style={{paddingHorizontal:40}}>
+              <TouchableOpacity onPress={this.createWallet} disabled={this.state.loading}
+                style={{backgroundColor:"#0078EA",width:"100%",
+                  height:55,borderRadius:10,marginTop:350}}>
+                <Text style={{color:"white",textAlign:"center",padding:12,fontSize:20}}>
+                  {this.state.loading==true?"Generating new wallet...":"Create Wallet Now"}
                 </Text>
               </TouchableOpacity>
-
-              <TouchableOpacity onPress={()=>this.props.navigation.navigate("Bottom")}
-                style={{backgroundColor:"#0078EA",width:"100%",
-                  height:55,borderRadius:10,marginTop:20}}>
-                <Text style={{color:"white",textAlign:"center",padding:12,fontSize:20}}>Go to Wallet</Text>
-              </TouchableOpacity>
-
             </View>
-
-          </>
-
-          <View style={{paddingHorizontal:40,display:"none"}}>
-            <TouchableOpacity
-              style={{backgroundColor:"#0078EA",width:"100%",
-                height:55,borderRadius:10,marginTop:350}}>
-              <Text style={{color:"white",textAlign:"center",padding:12,fontSize:20}}>Create Wallet Now</Text>
-            </TouchableOpacity>
-          </View>
+          }
 
 
         </ScrollView>

@@ -14,17 +14,58 @@ import {
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import QRCode from "react-native-qrcode-image";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ethers } from "ethers";
 
 class SendCoin extends Component {
   constructor() {
     super();
     this.state={
-      name:"",modal:false
+      name:"",modal:false,address:"",bal:"0",price:"600",amount:"",gasfee:"0",
+      raddress:""
     }
+    this.interval=null
   }
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    this.getToken()
+  }
+
+  getToken=async ()=>{
+    try {
+      const token  =await AsyncStorage.getItem("token");
+      if(token){
+        this.setState({token:token})
+        let wallet = new ethers.Wallet(token);
+        var address = wallet.address
+        this.setState({address:address})
+        setTimeout(()=>{
+          this.balance()
+        },200)
+        this.interval= setInterval(()=>{
+          this.balance()
+        },10000)
+      }else {
+        this.props.navigation.navigate("FirstPage")
+      }
+    } catch (error) {
+      console.log("error storage Home")
+    }
+
+  }
+
+  balance=async()=>{
+    const provider = new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org/', { name: 'binance', chainId: 56 })
+    let wallet = new ethers.Wallet(this.state.token);
+    var address = wallet.address
+    const ethbalance = await provider.getBalance(address);
+    this.setState({bal:ethers.utils.formatEther(ethbalance)})
+    console.log("Bal Send : ",ethers.utils.formatEther(ethbalance))
+    const feeData = await provider.getFeeData();
+    let gasPrice = feeData.gasPrice;
+    const gasPriceInEth = (21000*parseFloat(ethers.utils.formatUnits(feeData.maxFeePerGas, 'ether')));
+    this.setState({gasfee:(gasPriceInEth+0.00000005).toFixed(8)})
   }
 
   handleBackButton = () => {
@@ -33,6 +74,13 @@ class SendCoin extends Component {
   }
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    try{
+      clearInterval(this.interval)
+      this.interval=null
+      console.log("clear interval Send Coin")
+    }catch(err){
+      console.log(err)
+    }
   }
 
   modal=()=>{
@@ -43,7 +91,23 @@ class SendCoin extends Component {
     }
   }
 
+  amount=(val)=>{
+    this.setState({amount:val})
+  }
+  raddress=(val)=>{
+    this.setState({raddress:val})
+  }
+  max=(val)=>{
+    var v = parseFloat(this.state.bal)-parseFloat(this.state.gasfee)
+    this.setState({amount:v.toFixed(8)})
+  }
+
   render() {
+    var val = this.state
+    var balance = parseFloat(this.state.bal)
+    var price = parseFloat(val.price)
+    var usd = balance*price
+
     return (
       <View flex={10} style={{backgroundColor:"#FFFFFF",paddingBottom:60}} >
         <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true}/>
@@ -71,11 +135,11 @@ class SendCoin extends Component {
             <View style={{paddingHorizontal:10,marginTop:50}}>
               <View style={{color:"#000000",flexDirection:"row",paddingHorizontal:10,
                 borderBottomWidth:0,borderColor:"#000000",paddingBottom:5,marginBottom:40}}>
-                <Text style={{fontSize:17,textAlign:"left",width:"50%",color:"black"}}>
+                <Text style={{fontSize:17,textAlign:"left",width:"20%",color:"black"}}>
                 </Text>
-                <View style={{alignItems:"flex-end",width:"50%"}}>
+                <View style={{alignItems:"flex-end",width:"80%"}}>
                   <Text style={{fontSize:14,textAlign:"right",color:"black"}}>
-                    Available: 654 BINC
+                    Available: {balance.toFixed(balance>1?2:5)} BINC
                   </Text>
                 </View>
               </View>
@@ -83,16 +147,25 @@ class SendCoin extends Component {
                 width:"50%",color:"#0078EA",marginBottom:5}}>
                 Enter Amount
               </Text>
-              <TextInput style={{borderBottomWidth:1,borderColor:"#0078EA"}}
-                         placeholder={"Enter amount"}></TextInput>
+              <TextInput onChangeText={this.amount}
+                         value={val.amount}
+                         keyboardType={"numeric"}
+                         style={{borderBottomWidth:1,borderColor:"#0078EA"}}
+                         placeholder={"Enter amount"}/>
 
               <View style={{color:"#000000",flexDirection:"row",marginHorizontal:0,
                marginTop:8}}>
-                <Text style={{fontSize:14,textAlign:"left",width:"50%",color:"black"}}>
-                  $7665 USDT
-                </Text>
+                {
+                  val.amount?
+                    <Text style={{fontSize:14,textAlign:"left",width:"50%",color:"black"}}>
+                      ${(parseFloat(val.amount)*price).toFixed(2)} USDT
+                    </Text>:
+                    <Text style={{fontSize:14,textAlign:"left",width:"50%",color:"black"}}>
+
+                    </Text>
+                }
                 <View style={{alignItems:"flex-end",width:"50%"}}>
-                  <Text style={{fontSize:14,color:"#0078EA"}}>
+                  <Text onPress={this.max} style={{fontSize:14,color:"#0078EA"}}>
                     Max
                   </Text>
                 </View>
@@ -102,15 +175,17 @@ class SendCoin extends Component {
                 width:"50%",color:"#0078EA",marginBottom:5,marginTop:40}}>
                 Enter Address
               </Text>
-              <TextInput style={{borderBottomWidth:1,borderColor:"#0078EA"}}
-                         placeholder={"Enter address"}></TextInput>
+              <TextInput onChangeText={this.raddress}
+                         value={val.raddress}
+                         style={{borderBottomWidth:1,borderColor:"#0078EA"}}
+                         placeholder={"Enter address"}/>
 
               <View style={{color:"#000000",flexDirection:"row",marginHorizontal:0,
                 marginTop:15}}>
-                <Text style={{fontSize:14,textAlign:"left",width:"50%",color:"black"}}>
-                  Gas fee 0.005 BINC
+                <Text style={{fontSize:14,textAlign:"left",width:"80%",color:"black"}}>
+                  Gas fee {val.gasfee} BINC
                 </Text>
-                <View style={{alignItems:"flex-end",width:"50%"}}>
+                <View style={{alignItems:"flex-end",width:"20%"}}>
                 </View>
               </View>
 

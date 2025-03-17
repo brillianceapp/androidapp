@@ -9,31 +9,40 @@ import {
   TextInput,
   Linking,
   StatusBar,
-  ScrollView,BackHandler
+  ScrollView, BackHandler, ActivityIndicator,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class FirstPage extends Component {
+
+  constructor() {
+    super();
+    this.state={
+      loading:true
+    }
+  }
+
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     console.log(this.props.route.name)
+    this.getToken()
+    setTimeout(()=>{
+      this.setState({loading:false})
+    },5000)
   }
 
   getToken=async ()=>{
     try {
       const token  =await AsyncStorage.getItem("token");
       if(token){
-        this.setState({token:token})
         setTimeout(()=>{
           this.props.navigation.navigate("Bottom")
         },100)
       }else{
-        setTimeout(()=>{
-          this.props.navigation.navigate("FirstPage")
-        },100)
+        this.setState({loading:false})
       }
     } catch (error) {
-      this.setState({token:""})
+      this.setState({loading:false})
       console.log("Token error First Page")
     }
   }
@@ -62,15 +71,23 @@ class FirstPage extends Component {
               Make any type of payment using Brilliance Wallet
             </Text>
 
-            <TouchableOpacity onPress={()=>this.props.navigation.navigate("CreateWallet")}
-                              style={{backgroundColor:"#0078EA",width:"100%",height:55,borderRadius:10}}>
-              <Text style={{color:"white",textAlign:"center",padding:12,fontSize:20}}>Create Wallet</Text>
-            </TouchableOpacity>
 
-            <TouchableOpacity onPress={()=>this.props.navigation.navigate("ImportWallet")}
-              style={{borderColor:"black",borderWidth:1,width:"100%",height:55,borderRadius:10,marginVertical:20}}>
-              <Text style={{color:"#0078EA",textAlign:"center",padding:12,fontSize:20}}>I already have a wallet</Text>
-            </TouchableOpacity>
+            {
+              this.state.loading==true?
+                <ActivityIndicator size="large" color="#00ff00" />
+                :
+                <>
+                  <TouchableOpacity onPress={()=>this.props.navigation.navigate("CreateWallet")}
+                                    style={{backgroundColor:"#0078EA",width:"100%",height:55,borderRadius:10}}>
+                    <Text style={{color:"white",textAlign:"center",padding:12,fontSize:20}}>Create Wallet</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity onPress={()=>this.props.navigation.navigate("ImportWallet")}
+                                    style={{borderColor:"black",borderWidth:1,width:"100%",height:55,borderRadius:10,marginVertical:20}}>
+                    <Text style={{color:"#0078EA",textAlign:"center",padding:12,fontSize:20}}>I already have a wallet</Text>
+                  </TouchableOpacity>
+                </>
+            }
 
           </View>
 

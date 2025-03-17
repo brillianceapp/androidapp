@@ -9,7 +9,7 @@ import {
   ToastAndroid,
   ActivityIndicator,
   Dimensions,
-  TextInput,
+  TextInput, Clipboard,
 } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
@@ -18,7 +18,7 @@ import React, { Component } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ApiUrl from "../../AppUrl/ApiUrl";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import cryptoBalanceCheck from "../../cryptoBalanceCheck";
+import { ethers } from "ethers";
 
 class Home extends Component {
   constructor() {
@@ -26,11 +26,56 @@ class Home extends Component {
     this.state={
       token:"",loading:true,
       refreshing: false,
-      setRefreshing:false
+      setRefreshing:false,
+      address:"",bal:"0",price:"600",
     }
     this.interval=null
   }
 
+  componentDidMount() {
+    this.getToken()
+  }
+
+  getToken=async ()=>{
+    try {
+      const token  =await AsyncStorage.getItem("token");
+      if(token){
+        this.setState({token:token})
+        let wallet = new ethers.Wallet(token);
+        var address = wallet.address
+        this.setState({address:address})
+        setTimeout(()=>{
+          this.balance()
+        },200)
+        this.interval= setInterval(()=>{
+          this.balance()
+        },10000)
+      }else {
+        this.props.navigation.navigate("FirstPage")
+      }
+    } catch (error) {
+      console.log("error storage Home")
+    }
+
+  }
+
+  balance=async()=>{
+    const provider = new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org/', { name: 'binance', chainId: 56 })
+    let wallet = new ethers.Wallet(this.state.token);
+    var address = wallet.address
+    const ethbalance = await provider.getBalance(address);
+    this.setState({bal:ethers.utils.formatEther(ethbalance)})
+    console.log("Bal : ",ethers.utils.formatEther(ethbalance))
+  }
+
+  copyToClipboard = () => {
+    Clipboard.setString(this.state.token);
+    ToastAndroid.show(this.state.token,
+      ToastAndroid.SHORT,
+      ToastAndroid.TOP,
+      ToastAndroid.CENTER
+    );
+  };
 
   comingSoon = () => {
     ToastAndroid.show("Coming soon...",
@@ -57,7 +102,10 @@ class Home extends Component {
 
   render() {
     var val = this.state
-
+    var address2 = val.address.substring(0,6)+"......"+val.address.substring(val.address.length -5)
+    var balance = parseFloat(this.state.bal)
+    var price = parseFloat(val.price)
+    var usd = balance*price
     return (
       <ScrollView refreshControl={
         <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />} flex={1}
@@ -65,11 +113,15 @@ class Home extends Component {
         <StatusBar barStyle = "dark-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true}/>
 
         <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center"}}>
-          <Text style={{textAlign:"center",marginRight:10,color:"black",fontSize:17}}>0x0199......42156</Text>
-          <TouchableOpacity>
+          <Text style={{textAlign:"center",marginRight:10,color:"black",fontSize:17}}>
+            {val.address?address2:""}</Text>
+          {val.address?
+            <TouchableOpacity onPress={this.copyToClipboard}>
             <Image style={{width:20,height:20}}
                    source={require("../../images/blackcopy.png")} />
           </TouchableOpacity>
+            :""}
+
         </View>
 
         <Text style={{textAlign:"center",marginRight:10,
@@ -78,7 +130,7 @@ class Home extends Component {
 
         <Text style={{textAlign:"center",marginRight:10,
           color:"#0078EA",fontSize:25,marginBottom:40,fontWeight:"bold"}}>
-          $653.95</Text>
+          ${usd.toFixed(usd>1?2:4)}</Text>
 
 
         <View flex={3} style={{paddingHorizontal:35,flexDirection:"row"}}>
@@ -132,8 +184,10 @@ class Home extends Component {
              </View>
             <View style={{width:"50%",flexDirection:"flex-end",alignItems:"flex-end"}}>
               <View>
-                <Text style={{color:"black",fontWeight:"bold",fontSize:16}}>0.54</Text>
-                <Text style={{color:"black"}}>$546 </Text>
+                <Text style={{color:"black",fontWeight:"bold",fontSize:16}}>{
+                  balance.toFixed(balance>1?2:4)
+                }</Text>
+                <Text style={{color:"black",textAlign:"right"}}>${usd.toFixed(usd>1?2:4)} </Text>
               </View>
             </View>
           </View>

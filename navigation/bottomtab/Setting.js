@@ -7,14 +7,33 @@ import {
   TextInput,
   SafeAreaView,
   Button,
-  TouchableOpacity, Dimensions,
+  TouchableOpacity, Dimensions, ToastAndroid,
 } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import React, { Component } from "react";
 import Carousel from "react-native-snap-carousel";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class Setting extends Component {
+
+  logOut=async ()=>{
+    try {
+      await AsyncStorage.removeItem("token");
+      await ToastAndroid.show("Successfully Logout",
+        ToastAndroid.SHORT,
+        ToastAndroid.TOP,
+        ToastAndroid.CENTER
+      );
+      setTimeout(()=>{
+        this.props.navigation.navigate("FirstPage")
+      },1000)
+    } catch (error) {
+      this.logOut()
+      console.log("error storage side menu")
+    }
+
+  }
 
 
   render() {

@@ -16,6 +16,8 @@ import React, { Component } from "react";
 import QRCode from 'react-native-qrcode-image';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ethers } from "ethers";
 
 class ReceiveCoin extends Component {
 
@@ -23,28 +25,36 @@ class ReceiveCoin extends Component {
     super();
     this.state={
       name:"",
-      address:"0x01993ba5A122ebE4cEa42f345A1cCa6232642156"
+      address:""
     }
   }
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    this.getToken()
   }
   handleBackButton = () => {
     this.props.navigation.goBack()
     return true;
   }
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+
+  getToken=async ()=>{
+    try {
+      const token  =await AsyncStorage.getItem("token");
+      if(token){
+        this.setState({token:token})
+        let wallet = new ethers.Wallet(token);
+        var address = wallet.address
+        this.setState({address:address})
+      }else {
+        this.props.navigation.navigate("FirstPage")
+      }
+    } catch (error) {
+      console.log("error storage Home")
+    }
+
   }
 
-  Toast=(val)=>{
-    ToastAndroid.show(val,
-      ToastAndroid.SHORT,
-      ToastAndroid.TOP,
-      ToastAndroid.CENTER
-    );
-  }
   copyToClipboard = () => {
     Clipboard.setString(this.state.address);
     ToastAndroid.show(this.state.address,
@@ -53,7 +63,9 @@ class ReceiveCoin extends Component {
       ToastAndroid.CENTER
     );
   };
-
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
   render() {
     return (
       <View flex={10} style={{backgroundColor:"#FFFFFF",paddingBottom:60}} >

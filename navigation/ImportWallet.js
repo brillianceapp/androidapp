@@ -14,6 +14,7 @@ import {
 import ApiUrl from "../AppUrl/ApiUrl";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
+import { ethers } from "ethers";
 
 class ImportWallet extends Component {
   constructor() {
@@ -39,36 +40,33 @@ class ImportWallet extends Component {
   onSubmit=async ()=>{
     var val = this.state
     if(val.key==""){
-      this.Toast("Key is required")
+      this.Toast("Private Key is required")
     }
     if(val.key!==""){
       this.setState({loading:true})
-      var formdata = new FormData()
-      formdata.append("uid",val.key)
-      await fetch(ApiUrl.baseurl+"login",{
-        method: 'post',
-        headers: { 'Content-Type':'multipart/form-data'},
-        body:formdata
-      })
-        .then(response => response.json())
-        .then(res => {
+
+      try{
+        let wallet = new ethers.Wallet(val.key);
+        var address = wallet.address
+        console.log(address)
+        this.setToken(val.key)
+        setTimeout(()=>{
           this.setState({loading:false})
-          console.log(res)
-          if(res.success){
-            this.Toast(res.success)
-            this.setToken(res.token)
-            setTimeout(()=>{
-              this.props.navigation.navigate("Bottom")
-            },200)
-          }
-          if(res.error){
-            this.Toast(res.error)
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          this.setState({loading:false})
-        })
+          ToastAndroid.show("Successfully imported account",
+            ToastAndroid.SHORT,
+            ToastAndroid.TOP,
+            ToastAndroid.CENTER
+          );
+          this.props.navigation.navigate("Bottom")
+        },500)
+      }catch (e) {
+        ToastAndroid.show("Invalid Private Key",
+          ToastAndroid.SHORT,
+          ToastAndroid.TOP,
+          ToastAndroid.CENTER
+        );
+        this.setState({loading:false})
+      }
     }
   }
 
@@ -103,7 +101,7 @@ class ImportWallet extends Component {
               Private Key
             </Text>
 
-            <TextInput style={{borderColor:"#0078EA",borderWidth:2,
+            <TextInput onChangeText={this.key} style={{borderColor:"#0078EA",borderWidth:2,
               borderRadius:15,height:150,backgroundColor:"#E8F1FF",padding:20,
               color:"black",fontSize:16}} placeholder={"Paste your private key"}>
 

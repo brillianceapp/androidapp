@@ -29,6 +29,8 @@ import Backup from "./navigation/Backup";
 import About from "./navigation/About";
 
 
+
+
 const Stack = createNativeStackNavigator()
 const auth = 1
 const App = ({navigation}) => {

@@ -16,18 +16,37 @@ import React, { Component } from "react";
 import QRCode from 'react-native-qrcode-image';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ethers } from "ethers";
 
 class Backup extends Component {
   constructor() {
     super();
     this.state={
       name:"",
-      address:"0xtisimnacfyiwmqia"
+      address:"",token:""
     }
   }
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    this.getToken()
+  }
+  getToken=async ()=>{
+    try {
+      const token  =await AsyncStorage.getItem("token");
+      if(token){
+        this.setState({token:token})
+        let wallet = new ethers.Wallet(token);
+        var address = wallet.address
+        this.setState({address:address})
+      }else {
+        this.props.navigation.navigate("FirstPage")
+      }
+    } catch (error) {
+      console.log("error storage ")
+    }
+
   }
   handleBackButton = () => {
     this.props.navigation.goBack()
@@ -37,16 +56,10 @@ class Backup extends Component {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
 
-  Toast=(val)=>{
-    ToastAndroid.show(val,
-      ToastAndroid.SHORT,
-      ToastAndroid.TOP,
-      ToastAndroid.CENTER
-    );
-  }
+
   copyToClipboard = () => {
-    Clipboard.setString(this.state.address);
-    ToastAndroid.show(this.state.address,
+    Clipboard.setString(this.state.token);
+    ToastAndroid.show(this.state.token,
       ToastAndroid.SHORT,
       ToastAndroid.TOP,
       ToastAndroid.CENTER
@@ -78,11 +91,11 @@ class Backup extends Component {
               <Text style={{borderColor:"#0078EA",borderWidth:2,
                 borderRadius:15,height:150,backgroundColor:"#E8F1FF",padding:25,
                 color:"black",fontSize:20}}>
-                df824974bb0ea84e15e808dbdd208f6f8925ea8e702be3c9720cf049593e8404
+                {this.state.token}
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.copyToClipboard}>
               <Text style={{color:"#0078EA",fontSize:18,marginTop:60,
                 textAlign:"center"}}>
                 Copy to Clipboard <FontAwesome6 style={{
