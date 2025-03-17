@@ -9,7 +9,7 @@ import {
   TextInput,
   Linking,
   StatusBar,
-  ScrollView, BackHandler,Modal
+  ScrollView, BackHandler, Modal, ToastAndroid,
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
@@ -22,7 +22,7 @@ class SendCoin extends Component {
     super();
     this.state={
       name:"",modal:false,address:"",bal:"0",price:"600",amount:"",gasfee:"0",
-      raddress:""
+      raddress:"",loading:false
     }
     this.interval=null
   }
@@ -84,11 +84,32 @@ class SendCoin extends Component {
   }
 
   modal=()=>{
+    var val = this.state
+    var value = parseFloat(val.amount)-parseFloat(val.gasfee)
     if(this.state.modal==false){
-      this.setState({modal:true})
+      if(val.amount==""){
+        this.Toast("Amount is required")
+      }
+      if(val.raddress==""){
+        this.Toast("Address is required")
+      }
+      if(parseFloat(val.bal)<value){
+        this.Toast("Balance not enough")
+      }
+      if(val.amount!=="" && val.raddress!=="" && parseFloat(val.bal)>=value ){
+        this.setState({modal:true})
+      }
     }else {
       this.setState({modal:false})
     }
+  }
+
+  Toast=(val)=>{
+    ToastAndroid.show(val,
+      ToastAndroid.SHORT,
+      ToastAndroid.TOP,
+      ToastAndroid.CENTER
+    );
   }
 
   amount=(val)=>{
@@ -100,6 +121,41 @@ class SendCoin extends Component {
   max=(val)=>{
     var v = parseFloat(this.state.bal)-parseFloat(this.state.gasfee)
     this.setState({amount:v.toFixed(8)})
+  }
+
+  signTrx=async ()=>{
+    this.setState({loading:true})
+    const provider = new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org/', { name: 'binance', chainId: 56 })
+    let wallet = new ethers.Wallet(this.state.token,provider);
+    var address = wallet.address
+    const tx = {
+      from: address,//wallet.address,
+      to: this.state.raddress,
+      value: ethers.utils.parseUnits(this.state.amount, 'ether').toHexString(),
+      gasLimit: ethers.utils.hexlify(21000),
+    }
+    wallet.sendTransaction(tx)
+      .then((ttx) => {
+        this.Toast("Transaction has been broadcast to node")
+        this.setState({modal:false,loading:false})
+        ttx.wait()
+          .then(res=>{
+            this.Toast("Transaction Send Successful trx id : "+res.transactionHash)
+            console.log(res)
+            console.log("trx hash "+res.transactionHash)
+          })
+          .catch(error=>{
+            //console.log(error.message)
+            this.Toast(error.message)
+            this.setState({modal:false,loading:false})
+          })
+      })
+      .catch(error=>{
+        console.log(error.message)
+        this.Toast(error.message)
+        this.setState({modal:false,loading:false})
+      })
+
   }
 
   render() {
@@ -234,11 +290,11 @@ class SendCoin extends Component {
               </Text>
               <Text style={{fontSize:15,color:"black",
                 marginTop:0,textAlign:"center",marginBottom:10}}>
-                0.577 BINC
+                {parseFloat(val.amount).toFixed(8)} BINC
               </Text>
               <Text style={{fontSize:35,color:"#0078EA",fontWeight:"bold",
                 marginTop:0,textAlign:"center",marginBottom:50}}>
-                $654.98
+                ${(parseFloat(val.amount)*price).toFixed(2)}
               </Text>
 
               <View style={{color:"#000000",flexDirection:"row",
@@ -248,7 +304,7 @@ class SendCoin extends Component {
                 </Text>
                 <View style={{alignItems:"flex-end",width:"70%"}}>
                   <Text style={{color:"black"}}>
-                    0.0xfmmftR578mVcf0935bBm
+                    {val.address.substring(0,10)+"......"+val.address.substring(val.address.length -10)}
                   </Text>
                 </View>
               </View>
@@ -259,7 +315,7 @@ class SendCoin extends Component {
                 </Text>
                 <View style={{alignItems:"flex-end",width:"70%"}}>
                   <Text style={{color:"black"}}>
-                    0.0xfmmftR578mVcf0935bBm
+                    {val.raddress.substring(0,10)+"......"+val.raddress.substring(val.address.length -10)}
                   </Text>
                 </View>
               </View>
@@ -270,7 +326,7 @@ class SendCoin extends Component {
                 </Text>
                 <View style={{alignItems:"flex-end",width:"60%"}}>
                   <Text style={{color:"black"}}>
-                    0.54 BINC
+                    {parseFloat(val.gasfee).toFixed(8)} BINC
                   </Text>
                 </View>
               </View>
@@ -282,7 +338,7 @@ class SendCoin extends Component {
                 </Text>
                 <View style={{alignItems:"flex-end",width:"70%"}}>
                   <Text style={{color:"black"}}>
-                    0.54 BINC
+                    {parseFloat(val.amount).toFixed(8)} BINC
                   </Text>
                 </View>
               </View>
@@ -291,10 +347,12 @@ class SendCoin extends Component {
                 note : if your address don't correct you can lose your fund
               </Text>
 
-              <TouchableOpacity
+              <TouchableOpacity onPress={this.signTrx}
                 style={{backgroundColor:"#0078EA",width:"100%",
                   height:55,borderRadius:10,marginTop:50}}>
-                <Text style={{color:"white",textAlign:"center",padding:12,fontSize:18}}>Confirm</Text>
+                <Text style={{color:"white",textAlign:"center",padding:12,fontSize:18}}>
+                  {val.loading==true?"Sending...":"Confirm"}
+                </Text>
               </TouchableOpacity>
 
             </ScrollView>

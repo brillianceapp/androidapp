@@ -69,8 +69,8 @@ class Home extends Component {
   }
 
   copyToClipboard = () => {
-    Clipboard.setString(this.state.token);
-    ToastAndroid.show(this.state.token,
+    Clipboard.setString(this.state.address);
+    ToastAndroid.show(this.state.address,
       ToastAndroid.SHORT,
       ToastAndroid.TOP,
       ToastAndroid.CENTER
@@ -185,7 +185,7 @@ class Home extends Component {
             <View style={{width:"50%",flexDirection:"flex-end",alignItems:"flex-end"}}>
               <View>
                 <Text style={{color:"black",fontWeight:"bold",fontSize:16}}>{
-                  balance.toFixed(balance>1?2:4)
+                  balance.toFixed(balance>1?2:5)
                 }</Text>
                 <Text style={{color:"black",textAlign:"right"}}>${usd.toFixed(usd>1?2:4)} </Text>
               </View>
