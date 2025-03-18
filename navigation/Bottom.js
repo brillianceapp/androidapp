@@ -139,7 +139,7 @@ class Bottom extends Component {
                             style={{backgroundColor:"white",width:35,height:35,alignItems:"center",
                               marginRight:25,borderRadius:50}}>
                             <Text  style={{
-                              height:"100%",marginTop:0}}>
+                              height:"100%",marginTop:-10}}>
                               <Image style={{width:25,height:25,}}
                                      source={require("../images/notification.png")} />
                             </Text>

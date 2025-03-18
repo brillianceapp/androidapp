@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "88703646066",
+    "project_id": "brilliance-wallet",
+    "storage_bucket": "brilliance-wallet.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88703646066:android:46b47cef0496dc431cc5eb",
+        "android_client_info": {
+          "package_name": "com.brilliancewallet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOa70UTr4-uu-iwOpV_I0iyFHzqenZUtY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

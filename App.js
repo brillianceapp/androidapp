@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { View, Text, Image, ScrollView, TextInput, StatusBar, TouchableOpacity, Linking,LogBox  } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -28,13 +28,36 @@ import ReceiveCoin from "./navigation/ReceiveCoin";
 import Backup from "./navigation/Backup";
 import About from "./navigation/About";
 
+import messaging from '@react-native-firebase/messaging';
+import {PermissionsAndroid} from 'react-native';
+PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
+async function requestUserPermission() {
+  const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
+  if (enabled) {
+    console.log('Authorization status:', authStatus);
+  }
+}
 
 const Stack = createNativeStackNavigator()
 const auth = 1
 const App = ({navigation}) => {
   console.log(navigation)
+
+  useEffect(() => {
+    requestUserPermission()
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+    return unsubscribe;
+
+
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={"FirstPage"}
