@@ -30,6 +30,7 @@ class SendCoin extends Component {
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     this.getToken()
+    this.getBal()
   }
 
   getToken=async ()=>{
@@ -42,7 +43,7 @@ class SendCoin extends Component {
         this.setState({address:address})
         setTimeout(()=>{
           this.balance()
-        },200)
+        },500)
         this.interval= setInterval(()=>{
           this.balance()
         },10000)
@@ -56,16 +57,38 @@ class SendCoin extends Component {
   }
 
   balance=async()=>{
-    const provider = new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org/', { name: 'binance', chainId: 56 })
-    let wallet = new ethers.Wallet(this.state.token);
-    var address = wallet.address
+    console.log("Bal")
+    const provider =await new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org/', { name: 'binance', chainId: 56 })
+    let wallet =await new ethers.Wallet(this.state.token);
+    var address =await wallet.address
     const ethbalance = await provider.getBalance(address);
-    this.setState({bal:ethers.utils.formatEther(ethbalance)})
+    await this.setState({bal:ethers.utils.formatEther(ethbalance)})
     console.log("Bal Send : ",ethers.utils.formatEther(ethbalance))
     const feeData = await provider.getFeeData();
-    let gasPrice = feeData.gasPrice;
-    const gasPriceInEth = (21000*parseFloat(ethers.utils.formatUnits(feeData.maxFeePerGas, 'ether')));
-    this.setState({gasfee:(gasPriceInEth+0.00000005).toFixed(8)})
+    let gasPrice =await feeData.gasPrice;
+    const gasPriceInEth =await (21000*parseFloat(ethers.utils.formatUnits(feeData.maxFeePerGas, 'ether')));
+    await this.setState({gasfee:(gasPriceInEth+0.00000005).toFixed(8)})
+    await this.setBal(ethers.utils.formatEther(ethbalance))
+  }
+
+  getBal=async ()=>{
+    try {
+      const bal  =await AsyncStorage.getItem("bal");
+      if(bal){
+        this.setState({bal:bal})
+      }
+    } catch (error) {
+      console.log("error storage Send Coin Bal")
+    }
+  }
+
+  setBal=async (val)=>{
+    try {
+      await AsyncStorage.setItem("bal",val);
+      console.log("Bal set successfully ")
+    } catch (error) {
+      console.log("Bal Set storage error ")
+    }
   }
 
   handleBackButton = () => {

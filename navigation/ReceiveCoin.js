@@ -10,7 +10,7 @@ import {
   StatusBar,
   ScrollView,
   Clipboard,
-  ToastAndroid, BackHandler,
+  ToastAndroid, BackHandler, Share,
 } from "react-native";
 import React, { Component } from "react";
 import QRCode from 'react-native-qrcode-image';
@@ -38,6 +38,7 @@ class ReceiveCoin extends Component {
     return true;
   }
 
+
   getToken=async ()=>{
     try {
       const token  =await AsyncStorage.getItem("token");
@@ -63,6 +64,18 @@ class ReceiveCoin extends Component {
       ToastAndroid.CENTER
     );
   };
+
+  shareAddress=async ()=>{
+    try{
+      const result = await Share.share({
+        message:
+          this.state.address,
+      });
+    }catch (error) {
+      console.log(error.message);
+    }
+  }
+
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
   }
@@ -117,7 +130,7 @@ class ReceiveCoin extends Component {
             </View>
 
 
-            <TouchableOpacity onPress={()=>this.props.navigation.navigate("Bottom")}
+            <TouchableOpacity onPress={this.shareAddress}
                               style={{backgroundColor:"#0078EA",width:"100%",
                                 height:55,borderRadius:10,marginTop:70}}>
               <Text style={{color:"white",textAlign:"center",padding:12,fontSize:18}}>Continue</Text>

@@ -50,7 +50,9 @@
     "react-native-webview": "^13.8.1",
     "react-navigation-tabs": "^2.11.2",
     "save": "^2.9.0",
-    "tronweb": "^4.4.0"
+    "text-encoding": "^0.7.0",
+    "tronweb": "^4.4.0",
+    "web3": "^4.16.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

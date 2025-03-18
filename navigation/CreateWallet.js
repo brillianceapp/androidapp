@@ -19,6 +19,9 @@ import ApiUrl from "../AppUrl/ApiUrl";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import {ethers} from "ethers";
 import 'react-native-get-random-values';
+import Web3 from "web3";
+import QRCode from 'react-native-qrcode-svg';
+import 'text-encoding';
 
 class CreateWallet extends Component {
 
@@ -46,9 +49,10 @@ class CreateWallet extends Component {
     return true;
   }
 
-  createWallet=()=>{
+  createWallet=async ()=>{
     this.setState({loading:true})
-    var d = ethers.Wallet.createRandom().privateKey
+    /*
+    * var d = ethers.Wallet.createRandom().privateKey
     var key = d.substring(2)
     this.setState({key:key})
     console.log(key)
@@ -56,7 +60,14 @@ class CreateWallet extends Component {
     if(d){
       this.setState({key:key,loading:false})
       this.setToken(key)
-    }
+    }*/
+    var web3 =await new Web3()
+    var data =await web3.eth.accounts.create()
+    var priv =await data.privateKey
+    var key =await priv.substring(2)
+    await this.setState({key:key,loading:false})
+    await this.setToken(key)
+    await console.log(key)
 
   }
 

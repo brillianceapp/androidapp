@@ -33,6 +33,11 @@ class Setting extends Component {
       console.log("error storage side menu")
     }
 
+      try {
+        await AsyncStorage.removeItem("bal");
+      } catch (error) {
+      }
+
   }
 
 

@@ -8,7 +8,7 @@ import {
   Alert,
   TextInput,
   Linking,
-  StatusBar,
+  StatusBar,Clipboard,
   ScrollView, BackHandler, ToastAndroid, ActivityIndicator,
 } from "react-native";
 import ApiUrl from "../AppUrl/ApiUrl";
@@ -87,6 +87,12 @@ class ImportWallet extends Component {
     );
   }
 
+  pasteKey=async ()=>{
+    const text = await Clipboard.getString()
+    console.log(text)
+    this.setState({key:text})
+  }
+
   render() {
     return (
       <View flex={10} style={{backgroundColor:"#FFFFFF",paddingBottom:60}} >
@@ -101,11 +107,21 @@ class ImportWallet extends Component {
               Private Key
             </Text>
 
-            <TextInput onChangeText={this.key} style={{borderColor:"#0078EA",borderWidth:2,
+            <TextInput onChangeText={this.key}
+                       value={this.state.key}
+                       style={{borderColor:"#0078EA",borderWidth:2,
               borderRadius:15,height:150,backgroundColor:"#E8F1FF",padding:20,
-              color:"black",fontSize:16}} placeholder={"Paste your private key"}>
+              color:"black",fontSize:16}} secureTextEntry={false} placeholder={"Paste your private key"}>
 
             </TextInput>
+
+            <View style={{alignItems:"flex-end"}}>
+              <TouchableOpacity onPress={this.pasteKey} style={{backgroundColor:"#0078EA",color:"white",
+                alignItems:"center",padding:5,borderRadius:15,width:70,
+                marginTop:-40,marginRight:10}}>
+                <Text style={{color:"white"}}>Paste</Text>
+              </TouchableOpacity>
+            </View>
 
 
 
