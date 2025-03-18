@@ -161,8 +161,12 @@ class SendCoin extends Component {
       .then((ttx) => {
         this.Toast("Transaction has been broadcast to node")
         this.setState({modal:false,loading:false})
+        this.setState({ amount:"", raddress:"" })
         ttx.wait()
           .then(res=>{
+            setTimeout(()=>{
+              this.props.navigation.navigate("Bottom")
+            },2000)
             this.Toast("Transaction Send Successful trx id : "+res.transactionHash)
             console.log(res)
             console.log("trx hash "+res.transactionHash)
