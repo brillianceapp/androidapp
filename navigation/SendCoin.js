@@ -9,7 +9,7 @@ import {
   TextInput,
   Linking,
   StatusBar,
-  ScrollView, BackHandler, Modal, ToastAndroid,
+  ScrollView, BackHandler, Modal, ToastAndroid, Clipboard,
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
@@ -146,6 +146,12 @@ class SendCoin extends Component {
     this.setState({amount:v.toFixed(8)})
   }
 
+  pasteKey=async ()=>{
+    const text = await Clipboard.getString()
+    console.log(text)
+    this.setState({raddress:text})
+  }
+
   signTrx=async ()=>{
     this.setState({loading:true})
     const provider = new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org/', { name: 'binance', chainId: 56 })
@@ -269,6 +275,18 @@ class SendCoin extends Component {
                   Gas fee {val.gasfee} BINC
                 </Text>
                 <View style={{alignItems:"flex-end",width:"20%"}}>
+
+                  {
+                    val.raddress==""?
+                      <View style={{alignItems:"flex-end"}}>
+                        <TouchableOpacity onPress={this.pasteKey} style={{backgroundColor:"#0078EA",color:"white",
+                          alignItems:"center",padding:2.5,borderRadius:15,width:60,
+                          marginTop:-45,marginRight:0}}>
+                          <Text style={{color:"white"}}>Paste</Text>
+                        </TouchableOpacity>
+                      </View>:""
+                  }
+
                 </View>
               </View>
 

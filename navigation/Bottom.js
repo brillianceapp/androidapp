@@ -113,7 +113,7 @@ class Bottom extends Component {
                                 style={{backgroundColor:"white",width:35,height:35,alignItems:"center",
                                   marginRight:25,borderRadius:50}}>
                 <FontAwesome5 style={{
-                  padding:9
+                  padding:5
                 }} name={'arrow-left'} color="#0078EA"
                               size={20}  />
               </TouchableOpacity>
@@ -176,7 +176,7 @@ class Bottom extends Component {
                 style={{backgroundColor:"white",width:35,height:35,alignItems:"center",
                   marginRight:25,borderRadius:50}}>
                 <FontAwesome5 style={{
-                  padding:9
+                  padding:5
                 }} name={'arrow-left'} color="#0078EA"
                               size={20}  />
               </TouchableOpacity>

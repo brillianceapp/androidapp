@@ -152,7 +152,7 @@ class CreateWallet extends Component {
             :
             <View style={{paddingHorizontal:40}}>
 
-              <Text style={{color:"red",fontSize:15,marginTop:100}}>Note : New Private Key generate will take 30 Secong to 60 Seccond . Please Wait
+              <Text style={{color:"red",fontSize:15,marginTop:100}}>Note : New Private Key generate will take 30 Second to 60 Second . Please Wait
                 After Clicking Create Wallet Now
               </Text>
 
