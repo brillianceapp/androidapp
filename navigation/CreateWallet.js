@@ -9,7 +9,7 @@ import {
   TextInput,
   Linking,
   StatusBar,
-  ScrollView, StyleSheet, ToastAndroid, BackHandler, Clipboard,
+  ScrollView, StyleSheet, ToastAndroid, BackHandler, Clipboard, ActivityIndicator,
 } from "react-native";
 import Video, {VideoRef} from 'react-native-video';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -19,9 +19,7 @@ import ApiUrl from "../AppUrl/ApiUrl";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import {ethers} from "ethers";
 import 'react-native-get-random-values';
-//import Web3 from "web3";
-//import QRCode from 'react-native-qrcode-svg';
-//import 'text-encoding';
+
 
 class CreateWallet extends Component {
 
@@ -50,8 +48,10 @@ class CreateWallet extends Component {
   }
 
   createWallet=async ()=>{
-    this.setState({loading:true})
-    var d = ethers.Wallet.createRandom().privateKey
+    await this.setState({loading:true})
+
+
+   var d = ethers.Wallet.createRandom().privateKey
     var key = d.substring(2)
     this.setState({key:key})
     console.log(key)
@@ -60,15 +60,8 @@ class CreateWallet extends Component {
       this.setState({key:key,loading:false})
       this.setToken(key)
     }
-    /*
-    * */
-    /*    var web3 =await new Web3()
-    var data =await web3.eth.accounts.create()
-    var priv =await data.privateKey
-    var key =await priv.substring(2)
-    await this.setState({key:key,loading:false})
-    await this.setToken(key)
-    await console.log(key)*/
+
+    
 
   }
 
@@ -160,7 +153,9 @@ class CreateWallet extends Component {
                 style={{backgroundColor:"#0078EA",width:"100%",
                   height:55,borderRadius:10,marginTop:150}}>
                 <Text style={{color:"white",textAlign:"center",padding:12,fontSize:20}}>
-                  {this.state.loading==true?"Generating new wallet...":"Create Wallet Now"}
+                  {this.state.loading==true?<ActivityIndicator size="large" color="#00ff00" />
+                    :"Create Wallet Now"
+                  }
                 </Text>
               </TouchableOpacity>
             </View>
