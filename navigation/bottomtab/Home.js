@@ -35,6 +35,14 @@ class Home extends Component {
   componentDidMount() {
     this.getToken()
     this.getBal()
+   // const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+   // var privateKey1 = genRanHex(64)
+   // console.log(privateKey1," Key1")
+   // let wallet = new ethers.Wallet(privateKey1);
+   // var address = wallet.address
+    //console.log(address,"Address")
+
+
   }
 
   getToken=async ()=>{

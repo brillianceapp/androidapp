@@ -49,8 +49,19 @@ class CreateWallet extends Component {
 
   createWallet=async ()=>{
     await this.setState({loading:true})
+    const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+    var key = genRanHex(64)
+    let wallet = new ethers.Wallet(key);
+    console.log(key, "Key")
+    var address = wallet.address
+    console.log(address,"Address")
 
+    setTimeout(()=>{
+      this.setState({key:key,loading:false})
+      this.setToken(key)
+    },2000)
 
+    /*
    var d = ethers.Wallet.createRandom().privateKey
     var key = d.substring(2)
     this.setState({key:key})
@@ -60,8 +71,8 @@ class CreateWallet extends Component {
       this.setState({key:key,loading:false})
       this.setToken(key)
     }
+    */
 
-    
 
   }
 
@@ -145,13 +156,13 @@ class CreateWallet extends Component {
             :
             <View style={{paddingHorizontal:40}}>
 
-              <Text style={{color:"red",fontSize:15,marginTop:100}}>Note : New Private Key generate will take 30 Second to 60 Second . Please Wait
+              <Text style={{color:"red",fontSize:15,marginTop:100,display:"none"}}>Note : New Private Key generate will take 30 Second to 60 Second . Please Wait
                 After Clicking Create Wallet Now
               </Text>
 
               <TouchableOpacity onPress={this.createWallet} disabled={this.state.loading}
                 style={{backgroundColor:"#0078EA",width:"100%",
-                  height:55,borderRadius:10,marginTop:150}}>
+                  height:55,borderRadius:10,marginTop:250}}>
                 <Text style={{color:"white",textAlign:"center",padding:12,fontSize:20}}>
                   {this.state.loading==true?<ActivityIndicator size="large" color="#00ff00" />
                     :"Create Wallet Now"
