@@ -164,7 +164,7 @@ class CreateWallet extends Component {
                 style={{backgroundColor:"#0078EA",width:"100%",
                   height:55,borderRadius:10,marginTop:250}}>
                 <Text style={{color:"white",textAlign:"center",padding:12,fontSize:20}}>
-                  {this.state.loading==true?<ActivityIndicator size="large" color="#00ff00" />
+                  {this.state.loading==true?<ActivityIndicator size="large" color="#ffffff" />
                     :"Create Wallet Now"
                   }
                 </Text>
