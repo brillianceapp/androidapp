@@ -51,14 +51,16 @@ class History extends Component {
 
   trx=async ()=>{
     console.log("trx data")
-    await fetch("https://api.bscscan.com/api?module=account&action=txlist&address="+this.state.address+"&startblock=0&endblock=9999999999&page=1&offset=100&sort=desc&apikey=E7I26FJ1SQ4HWDETKZ5ZC71M65D4B8Y3HS",{
-      method: 'get',
+    await fetch("https://scan.brillianceglobal.ltd/api/account/trx/"+this.state.address,{
+      method: 'post',
       headers: { 'Content-Type':'multipart/form-data'}
     })
       .then(response => response.json())
       .then(res => {
-        this.setState({data:res.result,loading:false})
-        //console.log(res.result)
+        if(res.trx){
+          this.setState({data:res.trx,loading:false})
+        }
+        //console.log(res.trx)
       })
       .catch(err => {
         console.log(err)
@@ -74,16 +76,16 @@ class History extends Component {
       //console.log(res)
       var time = res.timeStamp*1000
       var ttype=""
-      if(res.from==this.state.address.toLowerCase()){
+      if(res.from.toLowerCase()==this.state.address.toLowerCase()){
         ttype="Sent"
       }
-      if(res.to==this.state.address.toLowerCase()){
+      if(res.to.toLowerCase()==this.state.address.toLowerCase()){
         ttype="Received"
       }
       var balance = ethers.utils.formatEther(res.value);
       var img = ttype=="Sent"?require("../../images/sendt.png"):require("../../images/rect.png")
       return(
-        <TouchableOpacity  onPress={()=>Linking.openURL("https://bscscan.com/tx/"+res.hash)}>
+        <TouchableOpacity  onPress={()=>Linking.openURL("https://scan.brillianceglobal.ltd/tx/"+res.hash)}>
           <View  style={{flexDirection:"row",paddingVertical:10,
             borderBottomWidth:0,borderColor:"#000000",paddingRight:10}}>
             <View flex={1} style={{flexDirection:"row"}}>

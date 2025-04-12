@@ -21,7 +21,7 @@ class SendCoin extends Component {
   constructor() {
     super();
     this.state={
-      name:"",modal:false,address:"",bal:"0",price:"600",amount:"",gasfee:"0",
+      name:"",modal:false,address:"",bal:"0",price:"0.0",amount:"",gasfee:"0",
       raddress:"",loading:false
     }
     this.interval=null
@@ -31,6 +31,46 @@ class SendCoin extends Component {
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     this.getToken()
     this.getBal()
+    this.getPrice()
+
+    fetch("https://api.brillianceglobal.ltd/coin",{
+      method: 'get',
+      headers: { 'Content-Type':'multipart/form-data'}
+    })
+      .then(response => response.json())
+      .then(res => {
+        console.log(res[0]["price"],"Price")
+        if(res[0]["price"]){
+          this.setPrice(res[0]["price"])
+          this.setState({price:res[0]["price"]})
+        }
+
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
+  }
+
+  getPrice=async ()=>{
+    try {
+      const price  =await AsyncStorage.getItem("price");
+      if(price){
+        console.log(price,"price get")
+        this.setState({price:price})
+      }
+    } catch (error) {
+      console.log("error storage send")
+    }
+  }
+
+  setPrice=async (val)=>{
+    try {
+      await AsyncStorage.setItem("price",val);
+      console.log("Price set successfully ")
+    } catch (error) {
+      console.log("Price Set storage error ")
+    }
   }
 
   getToken=async ()=>{
@@ -58,7 +98,7 @@ class SendCoin extends Component {
 
   balance=async()=>{
     console.log("Bal")
-    const provider =await new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org/', { name: 'binance', chainId: 56 })
+    const provider =await new ethers.providers.JsonRpcProvider('https://rpc.brillianceglobal.ltd/', { name: 'brilliance', chainId: 1020 })
     let wallet =await new ethers.Wallet(this.state.token);
     var address =await wallet.address
     const ethbalance = await provider.getBalance(address);
@@ -66,7 +106,9 @@ class SendCoin extends Component {
     console.log("Bal Send : ",ethers.utils.formatEther(ethbalance))
     const feeData = await provider.getFeeData();
     let gasPrice =await feeData.gasPrice;
-    const gasPriceInEth =await (21000*parseFloat(ethers.utils.formatUnits(feeData.maxFeePerGas, 'ether')));
+    console.log(gasPrice,"gas price")
+    const gasPriceInEth =await (21000*parseFloat(ethers.utils.formatUnits(gasPrice, 'ether')));
+    console.log(gasPriceInEth,"gas price eth")
     await this.setState({gasfee:(gasPriceInEth+0.00000005).toFixed(8)})
     await this.setBal(ethers.utils.formatEther(ethbalance))
   }
@@ -154,7 +196,7 @@ class SendCoin extends Component {
 
   signTrx=async ()=>{
     this.setState({loading:true})
-    const provider = new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org/', { name: 'binance', chainId: 56 })
+    const provider = new ethers.providers.JsonRpcProvider('https://rpc.brillianceglobal.ltd/', { name: 'brilliance', chainId: 1020 })
     let wallet = new ethers.Wallet(this.state.token,provider);
     var address = wallet.address
     const tx = {

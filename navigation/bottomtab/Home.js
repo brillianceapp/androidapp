@@ -27,7 +27,7 @@ class Home extends Component {
       token:"",loading:true,
       refreshing: false,
       setRefreshing:false,
-      address:"",bal:"0",price:"600",
+      address:"",bal:"0",price:"0.0",
     }
     this.interval=null
   }
@@ -35,6 +35,7 @@ class Home extends Component {
   componentDidMount() {
     this.getToken()
     this.getBal()
+    this.getPrice()
    // const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
    // var privateKey1 = genRanHex(64)
    // console.log(privateKey1," Key1")
@@ -42,8 +43,46 @@ class Home extends Component {
    // var address = wallet.address
     //console.log(address,"Address")
 
+     fetch("https://api.brillianceglobal.ltd/coin",{
+      method: 'get',
+      headers: { 'Content-Type':'multipart/form-data'}
+    })
+      .then(response => response.json())
+      .then(res => {
+        console.log(res[0]["price"],"Price")
+        if(res[0]["price"]){
+          this.setPrice(res[0]["price"])
+          this.setState({price:res[0]["price"]})
+        }
+
+      })
+      .catch(err => {
+        console.log(err)
+        this.setState({loading:false})
+      })
 
   }
+
+  getPrice=async ()=>{
+    try {
+      const price  =await AsyncStorage.getItem("price");
+      if(price){
+        this.setState({price:price})
+      }
+    } catch (error) {
+      console.log("error storage Home")
+    }
+  }
+
+  setPrice=async (val)=>{
+    try {
+      await AsyncStorage.setItem("price",val);
+      console.log("Price set successfully ")
+    } catch (error) {
+      console.log("Price Set storage error ")
+    }
+  }
+
 
   getToken=async ()=>{
     try {
@@ -70,7 +109,7 @@ class Home extends Component {
 
   balance=async()=>{
     console.log("Bal")
-    const provider =await new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org/', { name: 'binance', chainId: 56 })
+    const provider =await new ethers.providers.JsonRpcProvider('https://rpc.brillianceglobal.ltd/', { name: 'brilliance', chainId: 1020 })
     let wallet =await new ethers.Wallet(this.state.token);
     var address =await wallet.address
     const ethbalance = await provider.getBalance(address);
