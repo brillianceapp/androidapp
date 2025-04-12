@@ -84,6 +84,7 @@ class History extends Component {
       }
       var balance = ethers.utils.formatEther(res.value);
       var img = ttype=="Sent"?require("../../images/sendt.png"):require("../../images/rect.png")
+      var bal = parseFloat(balance)
       return(
         <TouchableOpacity  onPress={()=>Linking.openURL("https://scan.brillianceglobal.ltd/tx/"+res.hash)}>
           <View  style={{flexDirection:"row",paddingVertical:10,
@@ -101,7 +102,7 @@ class History extends Component {
               </View>
             </View>
             <View flex={1} style={{alignItems:"flex-end"}}>
-              <Text style={{color:ttype=="Sent"?"red":"green",fontSize:16}}>{ttype=="Sent"?"-":"+"}{parseFloat(balance).toFixed(6)} BINC</Text>
+              <Text style={{color:ttype=="Sent"?"red":"green",fontSize:16}}>{ttype=="Sent"?"-":"+"}{parseFloat(balance).toFixed(bal>=1?2:6)} BINC</Text>
               <Text style={{color:"#000000",fontSize:16}}>{moment(time).format('L')}</Text>
             </View>
           </View>
