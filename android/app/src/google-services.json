@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:88703646066:android:13db3935995efbcf1cc5eb",
+        "android_client_info": {
+          "package_name": "com.brillianceoverview"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOa70UTr4-uu-iwOpV_I0iyFHzqenZUtY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:88703646066:android:46b47cef0496dc431cc5eb",
         "android_client_info": {
           "package_name": "com.brilliancewallet"

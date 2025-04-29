@@ -124,7 +124,7 @@ class Bottom extends Component {
         <Tab.Screen name={"Wallet"} component={Home}
                     options={{headerShown:true,
                       unmountOnBlur: true,
-                      headerTitle: "MAIN WALLET",
+                      headerTitle: "HOME",
                       headerStyle: {
                         backgroundColor: '#ffffff',
                       },
