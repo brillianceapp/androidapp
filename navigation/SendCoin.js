@@ -33,7 +33,7 @@ class SendCoin extends Component {
     this.getBal()
     this.getPrice()
 
-    fetch("https://api.brillianceglobal.ltd/coin",{
+    fetch("https://api.binccoin.com/coin",{
       method: 'get',
       headers: { 'Content-Type':'multipart/form-data'}
     })
@@ -98,7 +98,7 @@ class SendCoin extends Component {
 
   balance=async()=>{
     console.log("Bal")
-    const provider =await new ethers.providers.JsonRpcProvider('https://rpc.brillianceglobal.ltd/', { name: 'brilliance', chainId: 1020 })
+    const provider =await new ethers.providers.JsonRpcProvider('https://rpc.binccoin.com/', { name: 'brilliance', chainId: 1020 })
     let wallet =await new ethers.Wallet(this.state.token);
     var address =await wallet.address
     const ethbalance = await provider.getBalance(address);
@@ -196,7 +196,7 @@ class SendCoin extends Component {
 
   signTrx=async ()=>{
     this.setState({loading:true})
-    const provider = new ethers.providers.JsonRpcProvider('https://rpc.brillianceglobal.ltd/', { name: 'brilliance', chainId: 1020 })
+    const provider = new ethers.providers.JsonRpcProvider('https://rpc.binccoin.com/', { name: 'brilliance', chainId: 1020 })
     let wallet = new ethers.Wallet(this.state.token,provider);
     var address = wallet.address
     const tx = {

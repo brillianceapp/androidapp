@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import Video, {VideoRef} from 'react-native-video';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import ApiUrl from "../AppUrl/ApiUrl";
+
 // Import the crypto getRandomValues shim (**BEFORE** the shims)
 
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";

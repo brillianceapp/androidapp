@@ -16,7 +16,6 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import React, { Component } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ApiUrl from "../../AppUrl/ApiUrl";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { ethers } from "ethers";
 
@@ -109,7 +108,7 @@ class Home extends Component {
 
   balance=async()=>{
     console.log("Bal")
-    const provider =await new ethers.providers.JsonRpcProvider('https://rpc.brillianceglobal.ltd/', { name: 'brilliance', chainId: 1020 })
+    const provider =await new ethers.providers.JsonRpcProvider('https://rpc.binccoin.com/', { name: 'brilliance', chainId: 1020 })
     let wallet =await new ethers.Wallet(this.state.token);
     var address =await wallet.address
     const ethbalance = await provider.getBalance(address);

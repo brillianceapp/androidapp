@@ -11,7 +11,6 @@ import {
   StatusBar,Clipboard,
   ScrollView, BackHandler, ToastAndroid, ActivityIndicator,
 } from "react-native";
-import ApiUrl from "../AppUrl/ApiUrl";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import { ethers } from "ethers";

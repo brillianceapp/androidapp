@@ -51,7 +51,7 @@ class History extends Component {
 
   trx=async ()=>{
     console.log("trx data")
-    await fetch("https://scan.brillianceglobal.ltd/api/account/trx/"+this.state.address,{
+    await fetch("https://scan.binccoin.com/api/account/trx/"+this.state.address,{
       method: 'post',
       headers: { 'Content-Type':'multipart/form-data'}
     })
@@ -86,7 +86,7 @@ class History extends Component {
       var img = ttype=="Sent"?require("../../images/sendt.png"):require("../../images/rect.png")
       var bal = parseFloat(balance)
       return(
-        <TouchableOpacity  onPress={()=>Linking.openURL("https://scan.brillianceglobal.ltd/tx/"+res.hash)}>
+        <TouchableOpacity  onPress={()=>Linking.openURL("https://scan.binccoin.com/tx/"+res.hash)}>
           <View  style={{flexDirection:"row",paddingVertical:10,
             borderBottomWidth:0,borderColor:"#000000",paddingRight:10}}>
             <View flex={1} style={{flexDirection:"row"}}>
